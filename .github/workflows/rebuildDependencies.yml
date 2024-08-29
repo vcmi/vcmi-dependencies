@@ -44,18 +44,16 @@ jobs:
             conan_profile: mingw32-linux.jinja
             conan_prebuilts: dependencies-mingw-32
           - platform: android-32
-            os: macos-14
+            os: ubuntu-24.04
             preset: android-conan-ninja-release
             conan_profile: android-32-ndk
             conan_prebuilts: dependencies-android-32
-            conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
             artifact_platform: armeabi-v7a
           - platform: android-64
-            os: macos-14
+            os: ubuntu-24.04
             preset: android-conan-ninja-release
             conan_profile: android-64-ndk
             conan_prebuilts: dependencies-android-64
-            conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
             artifact_platform: arm64-v8a
     runs-on: ${{ matrix.os }}
     defaults:
@@ -76,7 +74,7 @@ jobs:
         java-version: '11'
 
     - name: Prepare CI
-      if: ${{ !startsWith(matrix.platform, 'android-linux') }}
+      if: ${{ !startsWith(matrix.platform, 'android') }}
       run: source '${{github.workspace}}/CI/${{matrix.platform}}/before_install.sh'
 
     - name: Install Conan Dependencies
