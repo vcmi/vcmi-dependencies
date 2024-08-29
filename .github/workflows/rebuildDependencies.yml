@@ -83,8 +83,34 @@ jobs:
       if: "${{ matrix.conan_prebuilts != '' }}"
       run: source '${{github.workspace}}/CI/install_conan_dependencies.sh' '${{matrix.conan_prebuilts}}'
 
-    - name: Remove old packages
-      run: rm -rf ~/.conan/data/ffmpeg ~/.conan/data/yasm ~/.conan/data/pkgconfig ~/.conan/data/xz_utils
+    - name: Remove old binary packages
+      if: ${{ !startsWith(matrix.platform, 'android') }}
+      run: rm -rf ~/.conan/data/*/*/_/_/package
+    
+    # TODO: fix libiconv - fails to build on android (both macos and linux host)
+    - name: Remove old binary packages
+      if: ${{ startsWith(matrix.platform, 'android') }}
+      run: |
+        mv ~/.conan/data/libiconv ~/
+        rm -rf ~/.conan/data/*/*/_/_/package
+        mv ~/libiconv ~/.conan/data
+
+    # Completely remove packages that were confirmed to be rebuildable using upstream recipe/sources
+    # TODO: generate entire package from scratch instead of such cleanup
+    - name: Remove old recipes
+      run: |
+        rm -rf ~/.conan/data/ffmpeg 
+        rm -rf ~/.conan/data/pkgconfig
+        rm -rf ~/.conan/data/xz_utils
+        rm -rf ~/.conan/data/sdl_mixer
+        rm -rf ~/.conan/data/sdl_image
+        rm -rf ~/.conan/data/sdl_ttf 
+        rm -rf ~/.conan/data/sdl
+      
+    - name: Remove old recipes (non-apple)
+      if: ${{ matrix.platform != 'ios' && matrix.platform != 'mac-intel' && matrix.platform != 'mac-arm' }}
+      run: |
+        rm -rf ~/.conan/data/sqlite3
 
     - name: Setup Python
       uses: actions/setup-python@v5
