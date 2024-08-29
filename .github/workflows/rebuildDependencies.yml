@@ -17,37 +17,44 @@ jobs:
             os: macos-13
             preset: macos-conan-ninja-release
             conan_profile: macos-intel
+            conan_prebuilts: dependencies-mac-intel
             conan_options: --options with_apple_system_libs=True
             artifact_platform: intel
           - platform: mac-arm
             os: macos-13
             preset: macos-arm-conan-ninja-release
             conan_profile: macos-arm
+            conan_prebuilts: dependencies-mac-arm
             conan_options: --options with_apple_system_libs=True
             artifact_platform: arm
           - platform: ios
             os: macos-13
             preset: ios-release-conan-ccache
             conan_profile: ios-arm64
+            conan_prebuilts: dependencies-ios
             conan_options: --options with_apple_system_libs=True
           - platform: mingw
             os: ubuntu-24.04
             preset: windows-mingw-conan-linux
             conan_profile: mingw64-linux.jinja
+            conan_prebuilts: dependencies-mingw
           - platform: mingw-32
             os: ubuntu-24.04
             preset: windows-mingw-conan-linux
             conan_profile: mingw32-linux.jinja
+            conan_prebuilts: dependencies-mingw-32
           - platform: android-32
             os: macos-14
             preset: android-conan-ninja-release
             conan_profile: android-32-ndk
+            conan_prebuilts: dependencies-android-32
             conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
             artifact_platform: armeabi-v7a
           - platform: android-64
             os: macos-14
             preset: android-conan-ninja-release
             conan_profile: android-64-ndk
+            conan_prebuilts: dependencies-android-64
             conan_options: --conf tools.android:ndk_path=$ANDROID_NDK_ROOT
             artifact_platform: arm64-v8a
     runs-on: ${{ matrix.os }}
@@ -68,10 +75,13 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
-    - name: Install dependencies
+    - name: Prepare CI
+      if: ${{ !startsWith(matrix.platform, 'android-linux') }}
       run: source '${{github.workspace}}/CI/${{matrix.platform}}/before_install.sh'
-      env:
-        VCMI_BUILD_PLATFORM: x64
+
+    - name: Install Conan Dependencies
+      if: "${{ matrix.conan_prebuilts != '' }}"
+      run: source '${{github.workspace}}/CI/install_conan_dependencies.sh' '${{matrix.conan_prebuilts}}'
 
     - name: Remove old packages
       run: rm -rf ~/.conan/data/ffmpeg ~/.conan/data/yasm ~/.conan/data/pkgconfig ~/.conan/data/xz_utils
