@@ -136,9 +136,18 @@ jobs:
     - name: Remove builds and source code
       run: "conan remove --builds --src --force '*'"
       
-    - name: Remove Android SDK
-      if: ${{ startsWith(matrix.platform, 'android') }}
-      run: rm -rf ~/.conan/data/android-ndk
+    - name: Remove build requirements
+      run: |
+        rm -rf ~/.conan/data/android-ndk
+        rm -rf ~/.conan/data/autoconf
+        rm -rf ~/.conan/data/automake
+        rm -rf ~/.conan/data/b2
+        rm -rf ~/.conan/data/cmake
+        rm -rf ~/.conan/data/gnu-config
+        rm -rf ~/.conan/data/libtool
+        rm -rf ~/.conan/data/m4
+        rm -rf ~/.conan/data/pkgconf
+        rm -rf ~/.conan/data/yasm
 
     - name: Create dependencies archive
       run: "tar --create --xz --file dependencies-${{matrix.platform}}.txz -C ~/.conan data"
