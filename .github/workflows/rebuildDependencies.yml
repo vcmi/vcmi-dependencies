@@ -31,11 +31,11 @@ jobs:
             conan_profile: ios-arm64
             conan_options: --options with_apple_system_libs=True
           - platform: mingw
-            os: ubuntu-22.04
+            os: ubuntu-24.04
             preset: windows-mingw-conan-linux
             conan_profile: mingw64-linux.jinja
           - platform: mingw-32
-            os: ubuntu-22.04
+            os: ubuntu-24.04
             preset: windows-mingw-conan-linux
             conan_profile: mingw32-linux.jinja
           - platform: android-32
