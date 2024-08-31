@@ -149,6 +149,7 @@ jobs:
         rm -rf ~/.conan/data/gnu-config
         rm -rf ~/.conan/data/libtool
         rm -rf ~/.conan/data/m4
+        rm -rf ~/.conan/data/nasm
         rm -rf ~/.conan/data/pkgconf
         rm -rf ~/.conan/data/yasm
 
