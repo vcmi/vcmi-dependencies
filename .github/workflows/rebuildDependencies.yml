@@ -16,50 +16,39 @@ jobs:
           - platform: mac-intel
             os: macos-13
             before_install: macos.sh
-            preset: macos-conan-ninja-release
             conan_profile: macos-intel
             conan_prebuilts: dependencies-mac-intel
             conan_options: --options with_apple_system_libs=True
-            artifact_platform: intel
           - platform: mac-arm
             os: macos-13
             before_install: macos.sh
-            preset: macos-arm-conan-ninja-release
             conan_profile: macos-arm
             conan_prebuilts: dependencies-mac-arm
             conan_options: --options with_apple_system_libs=True
-            artifact_platform: arm
           - platform: ios
             os: macos-13
             before_install: macos.sh
-            preset: ios-release-conan-ccache
             conan_profile: ios-arm64
             conan_prebuilts: dependencies-ios
             conan_options: --options with_apple_system_libs=True
           - platform: mingw-x86-64
             os: ubuntu-24.04
             before_install: mingw_x86_64.sh
-            preset: windows-mingw-conan-linux
             conan_profile: mingw64-linux.jinja
             conan_prebuilts: dependencies-mingw
           - platform: mingw-x86
             os: ubuntu-24.04
             before_install: mingw_x86.sh
-            preset: windows-mingw-conan-linux
             conan_profile: mingw32-linux.jinja
             conan_prebuilts: dependencies-mingw-32
           - platform: android-armeabi-v7a
             os: ubuntu-24.04
-            preset: android-conan-ninja-release
             conan_profile: android-32-ndk
             conan_prebuilts: dependencies-android-32
-            artifact_platform: armeabi-v7a
           - platform: android-arm64-v8a
             os: ubuntu-24.04
-            preset: android-conan-ninja-release
             conan_profile: android-64-ndk
             conan_prebuilts: dependencies-android-64
-            artifact_platform: arm64-v8a
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -86,12 +75,12 @@ jobs:
       if: "${{ matrix.conan_prebuilts != '' }}"
       run: source '${{github.workspace}}/CI/install_conan_dependencies.sh' '${{matrix.conan_prebuilts}}'
 
-    - name: Remove old binary packages
+    - name: Remove old binary packages (non-android)
       if: ${{ !startsWith(matrix.platform, 'android') }}
       run: rm -rf ~/.conan/data/*/*/_/_/package
     
     # TODO: fix libiconv - fails to build on android (both macos and linux host)
-    - name: Remove old binary packages
+    - name: Remove old binary packages (android)
       if: ${{ startsWith(matrix.platform, 'android') }}
       run: |
         mv ~/.conan/data/libiconv ~/
@@ -103,7 +92,6 @@ jobs:
     - name: Remove old recipes
       run: |
         rm -rf ~/.conan/data/ffmpeg 
-        rm -rf ~/.conan/data/pkgconfig
         rm -rf ~/.conan/data/xz_utils
         rm -rf ~/.conan/data/sdl_mixer
         rm -rf ~/.conan/data/sdl_image
