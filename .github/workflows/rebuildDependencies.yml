@@ -91,11 +91,12 @@ jobs:
     # TODO: generate entire package from scratch instead of such cleanup
     - name: Remove old recipes
       run: |
-        rm -rf ~/.conan/data/ffmpeg 
+        rm -rf ~/.conan/data/boost
+        rm -rf ~/.conan/data/ffmpeg
         rm -rf ~/.conan/data/xz_utils
         rm -rf ~/.conan/data/sdl_mixer
         rm -rf ~/.conan/data/sdl_image
-        rm -rf ~/.conan/data/sdl_ttf 
+        rm -rf ~/.conan/data/sdl_ttf
         rm -rf ~/.conan/data/sdl
       
     - name: Remove old recipes (non-apple)
