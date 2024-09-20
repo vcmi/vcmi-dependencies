@@ -33,12 +33,12 @@ jobs:
             conan_options: --options with_apple_system_libs=True
           - platform: mingw-x86-64
             os: ubuntu-24.04
-            before_install: mingw_x86_64.sh
+            before_install: mingw.sh
             conan_profile: mingw64-linux.jinja
             conan_prebuilts: dependencies-mingw-x86-64
           - platform: mingw-x86
             os: ubuntu-24.04
-            before_install: mingw_x86.sh
+            before_install: mingw.sh
             conan_profile: mingw32-linux.jinja
             conan_prebuilts: dependencies-mingw-x86
           - platform: android-armeabi-v7a
