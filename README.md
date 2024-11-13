@@ -22,21 +22,13 @@ Current flow to update dependencies:
   - ffmpeg fails to find its dependencies when building with conan 1 + msvc 2019. Might be fixed in conan 2.
   - Qt fails to build due to broken string escaping in a path (conan 1 + msvc 2019)
 
-- Switch Android CI to use Linux runners instead of macOS runners (both for prebuilts and for vcmi itself)
+- Rebuild SDL_mixer and try to enable support for opus and flac. Needs investigation as to why libopus / libflac fail to build
 
-- Upgrade ubuntu runner to ubuntu-24.04 and rebuild packages using newer mingw
-
-- Rebuild boost and disable boost_url which we don't use
-
-- Rebuild SDL (including SDL_mixer and SDL_image). 
-  - Consider updating packages.
-  - Enable support for opus and flac.
-  - Remove unnecessary image formats such as gif and pcx
-  - Ensure that vcmi can load ogg/opus and flac as 'sounds' and not only as music
+- Consider removing pcx support from SDL_image
 
 - Rebuild ffmpeg with libdav1d and av1 support enabled. Needs investigation as to why dav1d fails to build on mingw and on android.
 
-- Rebuild all binaries in prebuilts package to ensure that everything is configured correctly and to replace any locally-built binaries with binaries from CI
+- Find out why libiconv fails to rebuild on Android
 
 - Rebuild entire package from scratch using latest recipes from conan, to test current version of recipes
 
