@@ -56,6 +56,7 @@ jobs:
       if: ${{ startsWith(matrix.platform, 'android') }}
       run: |
         rm -rf ~/.conan/data/*/*/_/_/package
+        echo -e "[buildenv]\nLD=ld" >> CI/conan/${{ matrix.conan_profile }}
 
     # Completely remove packages that were confirmed to be rebuildable using upstream recipe/sources
     # TODO: generate entire package from scratch instead of such cleanup
