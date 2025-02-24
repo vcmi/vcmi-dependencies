@@ -81,7 +81,7 @@ jobs:
     - name: Generate conan profile
       run: |
         conan profile new default --detect
-        conan install . \
+        conan install . -o 'boost/*:without_process=True' \
           --install-folder=conan-generated \
           --no-imports \
           --build=missing \
