@@ -177,6 +177,7 @@ onetbb/*:tbbproxy=False
 qt/*:config={{ qtConfig|join(' ') }}
 qt/*:essential_modules=False
 qt/*:openssl=True
+qt/*:qtsvg=True
 qt/*:qttools=True
 qt/*:with_freetype=False
 qt/*:with_libjpeg=False
