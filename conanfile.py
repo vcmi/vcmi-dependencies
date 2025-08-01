@@ -39,13 +39,9 @@ class VCMI(ConanFile):
         "with_ffmpeg": True,
     }
 
-    @property
-    def _isMobilePlatform(self):
-        return self.settings.os == "iOS" or self.settings.os == "Android"
-
     def config_options(self):
         # static on "single app" platforms
-        isSdlShared = not self._isMobilePlatform
+        isSdlShared = not (self.settings.os == "iOS" or self.settings.os == "Android")
         self.options["sdl"].shared = isSdlShared
         self.options["sdl_image"].shared = isSdlShared
         self.options["sdl_mixer"].shared = isSdlShared
@@ -80,7 +76,7 @@ class VCMI(ConanFile):
         # SDL versions between 2.22-2.26.1 have broken sound
         # self.requires("sdl/[^2.26.1 || >=2.0.20 <=2.22.0]")
         # versions before 2.30.7 don't build for Android with NDK 27: https://github.com/libsdl-org/SDL/issues/9792
-        self.requires("sdl/2.30.9", override=True)
+        self.requires("sdl/2.32.2", override=True)
 
         # launcher
         if self.settings.os == "Android":
@@ -108,11 +104,11 @@ class VCMI(ConanFile):
         if not is_apple_os(self) and qtDep.options.openssl != True:
             raise ConanInvalidConfiguration("qt:openssl option for non-Apple OS must be set to True, otherwise mods can't be downloaded")
 
-    def _pathForCmake(self, path):
+    def _pathForCmake(self, path) -> str:
         # CMake doesn't like \ in strings
         return path.replace(os.path.sep, os.path.altsep) if os.path.altsep else path
 
-    def _generateRuntimeLibsFile(self):
+    def _generateRuntimeLibsFile(self) -> str:
         # create file with list of libs to copy to the package for distribution
         runtimeLibsFile = self._pathForCmake(os.path.join(self.build_folder, "_runtime_libs.txt"))
 
