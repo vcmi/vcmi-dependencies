@@ -66,8 +66,6 @@ class VCMI(ConanFile):
         if self.options.with_ffmpeg:
             self.requires("ffmpeg/[>=4.4]")
 
-        # On Android SDL version must be the same as the version of Java wrapper for SDL in VCMI source code
-        # Wrapper can be found in the following directory: android/vcmi-app/src/main/java/org/libsdl/app
         # TODO: try enabling version range once there's no conflict
         # sdl_image & sdl_ttf depend on earlier version
         # ERROR: Version conflict: Conflict between sdl/2.28.5 and sdl/2.28.3 in the graph.
@@ -143,6 +141,7 @@ class VCMI(ConanFile):
         tc.variables["CONAN_RUNTIME_LIBS_FILE"] = self._generateRuntimeLibsFile()
         if self.settings.os == "Android":
             tc.variables["CMAKE_ANDROID_API"] = str(self.settings.os.api_level)
+            tc.variables["SDL_JAVA_SRC_DIR"] = os.path.join(self.dependencies.host["sdl"].package_folder, "share", "java", "SDL2")
         elif self.settings.os == "Windows":
             tc.variables["CONAN_RUNENV_SCRIPT"] = self._pathForCmake(os.path.join(self.build_folder, "conanrun.bat"))
         tc.generate()
