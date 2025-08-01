@@ -48,6 +48,9 @@ jobs:
             os: windows-latest
             conan_profile: msvc-x86
             conan_options: -o "&:target_pre_windows10=True"
+          - platform: windows-arm64
+            os: windows-11-arm
+            conan_profile: msvc-arm64
     runs-on: ${{ matrix.os }}
     defaults:
       run:

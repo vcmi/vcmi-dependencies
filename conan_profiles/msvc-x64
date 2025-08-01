@@ -1,4 +1,4 @@
-include(base/msvc)
+include(base/msvc-intel)
 
 [settings]
 arch=x86_64
