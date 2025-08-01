@@ -36,6 +36,10 @@ jobs:
             os: ubuntu-latest
             conan_profile: android-64-ndk
             conan_system_libs: zlib
+          - platform: android-x64
+            os: ubuntu-latest
+            conan_profile: android-x64-ndk
+            conan_system_libs: zlib
           - platform: windows-x64
             os: windows-latest
             conan_profile: msvc-x64
