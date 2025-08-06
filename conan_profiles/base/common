@@ -142,6 +142,9 @@ ffmpeg/*:enable_protocols={{ ffProtocols|join(',') }}
 # ffmpeg/*:with_programs=True
 # ffmpeg/*:with_sdl=True
 
+# Lua
+lua/*:compile_as_cpp=True
+
 # oneTBB
 onetbb/*:tbbbind=False
 onetbb/*:tbbmalloc=False

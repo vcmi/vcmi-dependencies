@@ -15,7 +15,6 @@ class VCMI(ConanFile):
     generators = "CMakeDeps"
 
     _libRequires = [
-        "luajit/2.1.0-beta3",
         "minizip/[^1.2.12]",
         "zlib/[^1.2.12]",
     ]
@@ -33,10 +32,12 @@ class VCMI(ConanFile):
     options = {
         "target_pre_windows10": [True, False],
         "with_ffmpeg": [True, False],
+        "lua_lib": [None, "luajit", "lua"]
     }
     default_options = {
         "target_pre_windows10": False,
         "with_ffmpeg": True,
+        "lua_lib": "luajit",
     }
 
     def config_options(self):
@@ -61,6 +62,14 @@ class VCMI(ConanFile):
             self.requires(f"boost/[>={boostMinVersion} <1.87]")
         else:
             self.requires(f"boost/[^{boostMinVersion}]")
+
+        if self.options.lua_lib:
+            lib = str(self.options.lua_lib)
+            libVersion = {
+                "lua": "[^5.4.7]",
+                "luajit": "2.1.0-beta3",
+            }.get(lib)
+            self.requires(f"{lib}/{libVersion}")
 
         # client
         if self.options.with_ffmpeg:

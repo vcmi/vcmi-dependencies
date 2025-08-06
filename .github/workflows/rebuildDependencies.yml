@@ -51,6 +51,7 @@ jobs:
           - platform: windows-arm64
             os: windows-11-arm
             conan_profile: msvc-arm64
+            conan_options: -o "&:lua_lib=lua"
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -158,6 +159,7 @@ jobs:
 
     # TODO: remove LuaJIT when https://github.com/conan-io/conan-center-index/pull/26577 is merged
     - name: Build LuaJIT from PR changes
+      if: ${{ !contains(matrix.conan_options, '"&:lua_lib=lua"') }}
       run: |
         cciForkRepo='cci-fork'
         branchName='vcmi'
@@ -218,6 +220,7 @@ jobs:
 
         conan graph info . \
           --profile=conan_profiles/${{ matrix.conan_profile }} \
+          ${{ matrix.conan_options }} \
           --format=json \
           --build=never \
           --no-remote \
