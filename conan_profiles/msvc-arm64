@@ -1,0 +1,8 @@
+include(base/msvc)
+
+[settings]
+arch=armv8
+
+[conf]
+# workaround for https://github.com/libsdl-org/SDL/issues/13254
+sdl/*:tools.cmake.cmaketoolchain:extra_variables={'SDL_LIBC': 'ON'}

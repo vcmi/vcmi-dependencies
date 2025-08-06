@@ -1,0 +1,13 @@
+{% import 'vars.jinja' as vars %}
+
+include(common)
+
+[settings]
+compiler=msvc
+compiler.cppstd={{ vars.cppstd }}
+compiler.runtime=dynamic
+compiler.version=194
+os=Windows
+
+[options]
+ffmpeg/*:shared=True
