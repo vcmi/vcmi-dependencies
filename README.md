@@ -6,7 +6,7 @@ Current flow to update dependencies:
 1. Open PR with changes
 2. Make sure that CI build succeeds
 3. Merge the PR
-4. (TBD) Run workflow to create new release from the CI run
+4. Run workflow to create new release from the CI run
 5. (TBD) Update dependencies submodule and prebuilts URL in VCMI repo to point to the new commit / release, update VCMI code if needed
 
 # TODO List
@@ -19,5 +19,3 @@ Current flow to update dependencies:
 - Rebuild ffmpeg with libdav1d and av1 support enabled. Needs investigation as to why dav1d fails to build on mingw and on android.
 
 - Run CI with full package rebuild on schedule (weekly? monthly?) to detect any regressions or breaking changes in CI or in used recipes
-
-- (shouldn't be needed probably) Automatically generate Github release with updated packages as part of CI. Should probably be done only for changes in main branch and/or for manually triggered workflows
