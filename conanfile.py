@@ -1,18 +1,14 @@
 from conan import ConanFile
 from conan.errors import ConanInvalidConfiguration
 from conan.tools.apple import is_apple_os
-from conan.tools.cmake import CMakeToolchain
-from conan.tools.files import save
 from conan.tools.microsoft import is_msvc
 
-from glob import glob
-import os
+from os import getenv
 
 required_conan_version = ">=2.13.0"
 
 class VCMI(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    generators = "CMakeDeps"
 
     _libRequires = [
         "minizip/[^1.2.12]",
@@ -49,7 +45,7 @@ class VCMI(ConanFile):
         self.options["sdl_ttf"].shared = isSdlShared
 
         if self.settings.os == "Android":
-            self.options["qt"].android_sdk = os.getenv("ANDROID_HOME")
+            self.options["qt"].android_sdk = getenv("ANDROID_HOME")
 
         if self.settings.os != "Windows":
             del self.options.target_pre_windows10
@@ -110,47 +106,3 @@ class VCMI(ConanFile):
             raise ConanInvalidConfiguration("qt:qtandroidextras option for Android must be set to True")
         if not is_apple_os(self) and qtDep.options.openssl != True:
             raise ConanInvalidConfiguration("qt:openssl option for non-Apple OS must be set to True, otherwise mods can't be downloaded")
-
-    def _pathForCmake(self, path) -> str:
-        # CMake doesn't like \ in strings
-        return path.replace(os.path.sep, os.path.altsep) if os.path.altsep else path
-
-    def _generateRuntimeLibsFile(self) -> str:
-        # create file with list of libs to copy to the package for distribution
-        runtimeLibsFile = self._pathForCmake(os.path.join(self.build_folder, "_runtime_libs.txt"))
-
-        runtimeLibExtension = {
-            "Android": "so",
-            "iOS":     "dylib",
-            "Macos":   "dylib",
-            "Windows": "dll",
-        }.get(str(self.settings.os))
-
-        runtimeLibs = []
-        for _, dep in self.dependencies.host.items():
-            # Qt libs are copied using *deployqt
-            if dep.ref.name == "qt":
-                continue
-
-            runtimeLibDir = ''
-            if self.settings.os == "Windows":
-                if len(dep.cpp_info.bindirs) > 0:
-                    runtimeLibDir = dep.cpp_info.bindir
-            elif len(dep.cpp_info.libdirs) > 0:
-                runtimeLibDir = dep.cpp_info.libdir
-            if len(runtimeLibDir) > 0:
-                runtimeLibs += glob(os.path.join(runtimeLibDir, f"*.{runtimeLibExtension}"))
-        save(self, runtimeLibsFile, "\n".join(runtimeLibs))
-
-        return runtimeLibsFile
-
-    def generate(self):
-        tc = CMakeToolchain(self)
-        tc.variables["USING_CONAN"] = True
-        tc.variables["CONAN_RUNTIME_LIBS_FILE"] = self._generateRuntimeLibsFile()
-        if self.settings.os == "Android":
-            tc.variables["CMAKE_ANDROID_API"] = str(self.settings.os.api_level)
-            tc.variables["SDL_JAVA_SRC_DIR"] = os.path.join(self.dependencies.host["sdl"].package_folder, "share", "java", "SDL2")
-        elif self.settings.os == "Windows":
-            tc.variables["CONAN_RUNENV_SCRIPT"] = self._pathForCmake(os.path.join(self.build_folder, "conanrun.bat"))
-        tc.generate()
