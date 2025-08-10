@@ -97,6 +97,10 @@ class VCMI(ConanFile):
         if self.dependencies["sdl"].options.sdl2main != sdl2mainValue:
             raise ConanInvalidConfiguration(f"sdl:sdl2main option for {self.settings.os} must be set to {sdl2mainValue}")
 
+        # LuaJIT
+        if is_msvc(self) and self.settings.arch == "armv8" and self.options.lua_lib == "luajit":
+            raise ConanInvalidConfiguration("LuaJIT can't be built for MSVC ARM64 at the moment, &:lua_lib option must be set to lua")
+
         # Qt
         qtDep = self.dependencies["qt"]
         if qtDep.options.qttools != True:
