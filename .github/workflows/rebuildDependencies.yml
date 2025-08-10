@@ -15,42 +15,42 @@ jobs:
           - platform: mac-intel
             os: macos-14
             before_install: macos.sh
-            conan_profile: macos-intel
+            conan_profiles: '["macos-intel", "base/apple-system"]'
             conan_system_libs: bzip2 libiconv sqlite3 zlib
           - platform: mac-arm
             os: macos-14
             before_install: macos.sh
-            conan_profile: macos-arm
+            conan_profiles: '["macos-arm", "base/apple-system"]'
             conan_system_libs: bzip2 libiconv sqlite3 zlib
           - platform: ios
             os: macos-14
             before_install: macos.sh
-            conan_profile: ios-arm64
+            conan_profiles: '["ios-arm64", "base/apple-system"]'
             conan_system_libs: bzip2 libiconv sqlite3 zlib
           - platform: android-armeabi-v7a
             os: ubuntu-latest
             before_install: android-32.sh
-            conan_profile: android-32-ndk
+            conan_profiles: '["android-32-ndk", "base/android-system"]'
             conan_system_libs: zlib
           - platform: android-arm64-v8a
             os: ubuntu-latest
-            conan_profile: android-64-ndk
+            conan_profiles: '["android-64-ndk", "base/android-system"]'
             conan_system_libs: zlib
           - platform: android-x64
             os: ubuntu-latest
-            conan_profile: android-x64-ndk
+            conan_profiles: '["android-x64-ndk", "base/android-system"]'
             conan_system_libs: zlib
           - platform: windows-x64
             os: windows-latest
-            conan_profile: msvc-x64
+            conan_profiles: '["msvc-x64"]'
             conan_options: -o "&:target_pre_windows10=True"
           - platform: windows-x86
             os: windows-latest
-            conan_profile: msvc-x86
+            conan_profiles: '["msvc-x86"]'
             conan_options: -o "&:target_pre_windows10=True"
           - platform: windows-arm64
             os: windows-11-arm
-            conan_profile: msvc-arm64
+            conan_profiles: '["msvc-arm64"]'
             conan_options: -o "&:lua_lib=lua"
     runs-on: ${{ matrix.os }}
     defaults:
@@ -62,9 +62,13 @@ jobs:
 
     - name: Define common variables
       run: |
-        echo CUSTOM_PATCHES_PATH="$(pwd)/conan_patches" >> "$GITHUB_ENV"
+        echo CUSTOM_PATCHES_PATH="$PWD/conan_patches" >> "$GITHUB_ENV"
         echo DEPS_FILE="dependencies-${{ matrix.platform }}.tgz" >> "$GITHUB_ENV"
         echo DEPS_LIST_FILE="dependencies-${{ matrix.platform }}.txt" >> "$GITHUB_ENV"
+
+        # builds a list of profile parameters, poor man's `map` function
+        profiles="${{ join(fromJSON(matrix.conan_profiles), ' --profile=$PWD/conan_profiles/') }}"
+        echo CONAN_PROFILES="--profile=$PWD/conan_profiles/$profiles" >> "$GITHUB_ENV"
 
     - name: Prepare CI
       if: ${{ matrix.before_install }}
@@ -148,9 +152,9 @@ jobs:
           fi
 
           # Windows workaround for https://bugreports.qt.io/browse/QTBUG-84543
-          PATH="$WINDOWS_PERL_DIR:$PATH" conan create $packagePath \
+          PATH="$WINDOWS_PERL_DIR:$PATH" conan create "$packagePath" \
             --version=$version \
-            --profile=../conan_profiles/${{ matrix.conan_profile }} \
+            $CONAN_PROFILES \
             --build=missing \
             --test-folder= \
             --core-conf core.sources.patch:extra_path=$CUSTOM_PATCHES_PATH \
@@ -185,7 +189,7 @@ jobs:
 
           conan create "recipes/$package/all" \
             --version=$version \
-            --profile=../conan_profiles/${{ matrix.conan_profile }} \
+            $CONAN_PROFILES \
             --build=missing \
             --test-folder=
         done
@@ -195,7 +199,7 @@ jobs:
         conan install . \
           --output-folder=conan-generated \
           --build=missing \
-          --profile=conan_profiles/${{ matrix.conan_profile }} \
+          $CONAN_PROFILES \
           ${{ matrix.conan_options }}
 
     - name: Remove builds and source code
@@ -219,7 +223,7 @@ jobs:
         packageListFile='pkglist.json'
 
         conan graph info . \
-          --profile=conan_profiles/${{ matrix.conan_profile }} \
+          $CONAN_PROFILES \
           ${{ matrix.conan_options }} \
           --format=json \
           --build=never \
