@@ -206,18 +206,6 @@ jobs:
     - name: Remove builds and source code
       run: conan cache clean
 
-    - name: Get NDK path
-      if: ${{ startsWith(matrix.platform, 'android') }}
-      run: |
-        ndkPackage='android-ndk'
-        hexRegex='[[:xdigit:]]+'
-
-        ndkPackageRevision=$(conan list --format=compact "$ndkPackage/*:*" \
-          | egrep --only-matching "$ndkPackage/\\w+#$hexRegex:$hexRegex")
-        ndkPackagePath=$(conan cache path "$ndkPackageRevision")
-        ndkPath="$ndkPackagePath/bin"
-        echo "NDK directory: $ndkPath"
-
     - name: Remove build requirements' binaries
       run: |
         graphFile='graph.json'
