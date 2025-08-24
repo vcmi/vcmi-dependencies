@@ -140,7 +140,7 @@ jobs:
 
         # versions must be synced with: conan_patches/<package>/conandata.yml
         # if no custom patches are required for a package, it should be removed from here
-        for p in minizip/1.3.1 flac/1.4.2 qt/5.15.16 ; do
+        for p in minizip/1.3.1 flac/1.4.2 ; do
           IFS_OLD="$IFS"
           IFS=/
           read package version <<<"$p"
@@ -163,11 +163,12 @@ jobs:
         done
 
     # TODO: remove LuaJIT when https://github.com/conan-io/conan-center-index/pull/26577 is merged
-    - name: Build LuaJIT from PR changes
-      if: ${{ !contains(matrix.conan_options, '"&:lua_lib=lua"') }}
+    # TODO: remove Qt5 when https://github.com/conan-io/conan-center-index/pull/28251 is merged
+    - name: Build LuaJIT & Qt5 from PR changes
       run: |
         cciForkRepo='cci-fork'
         branchName='vcmi'
+        recipePathQt='recipes/qt'
 
         git clone "https://github.com/kambala-decapitator/conan-center-index.git" "$cciForkRepo" \
           --branch "$branchName" \
@@ -179,20 +180,30 @@ jobs:
         cd "$cciForkRepo"
         git sparse-checkout set \
           recipes/luajit \
+          $recipePathQt \
 
         git checkout
 
-        for p in luajit/2.1.0-beta3 ; do
+        for p in ${{ contains(matrix.conan_options, '"&:lua_lib=lua"') && ' ' || 'luajit/2.1.0-beta3' }} qt/5.15.16 ; do
           IFS_OLD="$IFS"
           IFS=/
           read package version <<<"$p"
           IFS="$IFS_OLD"
 
-          conan create "recipes/$package/all" \
+          if [[ $package == qt ]] ; then
+            packagePath="$recipePathQt/5.x.x"
+          else
+            packagePath="recipes/$package/all"
+          fi
+
+          # Windows workaround for https://bugreports.qt.io/browse/QTBUG-84543
+          PATH="$WINDOWS_PERL_DIR:$PATH" conan create "$packagePath" \
             --version=$version \
             $CONAN_PROFILES \
             --build=missing \
-            --test-folder=
+            --test-folder= \
+            --core-conf core.sources.patch:extra_path=$CUSTOM_PATCHES_PATH \
+            ${{ startsWith(matrix.platform, 'android') && '-o "qt/*:android_sdk=$ANDROID_HOME"' || '' }}
         done
 
     - name: Generate conan profile
