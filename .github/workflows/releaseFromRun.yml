@@ -6,6 +6,11 @@ on:
         description: 'Actions run ID which to get artifacts from'
         required: true
         type: number
+      is_draft:
+        description: 'If new pre-release will be created as draft'
+        required: true
+        default: true
+        type: boolean
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -49,6 +54,7 @@ jobs:
               "gh", "release", "create", tag,
               "--repo", "${{ github.repository }}",
               "--prerelease",
+              ${{ github.event.inputs.is_draft == 'true' && '"--draft",' || '' }}
               "--title", tag,
               "--notes", releaseNotes,
           ] + dependencies, check=True)
