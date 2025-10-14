@@ -9,7 +9,7 @@ on:
       is_draft:
         description: 'If new pre-release will be created as draft'
         required: true
-        default: true
+        default: false
         type: boolean
 jobs:
   build:
