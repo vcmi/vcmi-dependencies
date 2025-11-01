@@ -37,6 +37,11 @@ jobs:
             os: ubuntu-latest
             conan_profiles: '["android-64-ndk", "base/android-system"]'
             conan_system_libs: zlib
+          - platform: android-x86
+            os: ubuntu-latest
+            before_install: android-32.sh
+            conan_profiles: '["android-x86-ndk", "base/android-system"]'
+            conan_system_libs: zlib
           - platform: android-x64
             os: ubuntu-latest
             conan_profiles: '["android-x64-ndk", "base/android-system"]'
