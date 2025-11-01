@@ -9,6 +9,8 @@ ninja/1.12.1
 # TODO: remove after https://github.com/conan-io/conan-center-index/pull/27125 is merged
 # Qt 5 depends on 0.4.8, but it doesn't build for iOS
 md4c/0.4.8: md4c/0.5.2
+# Fix for Version conflict: Conflict between opus/1.4 and opus/1.5.2 in the graph. Conflict originates from ffmpeg/7.1.1
+opus/*: opus/1.4
 
 [conf]
 tools.cmake.cmaketoolchain:generator=Ninja
