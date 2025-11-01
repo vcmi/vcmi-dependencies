@@ -3,3 +3,9 @@ include(base/android)
 [settings]
 arch=x86
 os.api_level=21
+
+[options]
+# Workaround for linker error:
+# "relocation R_386_32 cannot be used against local symbol; recompile with -fPIC"
+# Force mpg123 to build as shared to avoid non-PIC ASM objects on Android x86
+mpg123/*:shared=True
