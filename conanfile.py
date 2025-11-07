@@ -28,12 +28,14 @@ class VCMI(ConanFile):
     options = {
         "target_pre_windows10": [True, False],
         "with_ffmpeg": [True, False],
-        "lua_lib": [None, "luajit", "lua"]
+        "lua_lib": ["None", "luajit", "lua"],
+        "qt_version": ["None", 5, 6],
     }
     default_options = {
         "target_pre_windows10": False,
         "with_ffmpeg": True,
         "lua_lib": "luajit",
+        "qt_version": 5,
     }
 
     def config_options(self):
@@ -44,7 +46,7 @@ class VCMI(ConanFile):
         self.options["sdl_mixer"].shared = isSdlShared
         self.options["sdl_ttf"].shared = isSdlShared
 
-        if self.settings.os == "Android":
+        if self.settings.os == "Android" and self.options.qt_version != "None":
             self.options["qt"].android_sdk = getenv("ANDROID_HOME")
 
         if self.settings.os != "Windows":
@@ -59,7 +61,7 @@ class VCMI(ConanFile):
         else:
             self.requires(f"boost/[^{boostMinVersion}]")
 
-        if self.options.lua_lib:
+        if self.options.lua_lib != "None":
             lib = str(self.options.lua_lib)
             libVersion = {
                 "lua": "[^5.4.7]",
@@ -82,10 +84,14 @@ class VCMI(ConanFile):
         self.requires("sdl/2.32.2", override=True)
 
         # launcher
-        if self.settings.os == "Android":
-            self.requires("qt/[~5.15.14]") # earlier versions have serious bugs
-        else:
-            self.requires("qt/[~5.15.2]")
+        if self.options.qt_version == 6:
+            # android widgets 6.7-6.8.3 & 6.9-6.9.1 https://bugreports.qt.io/browse/QTBUG-123327
+            self.requires("qt/[^6.8]")
+        elif self.options.qt_version == 5:
+            if self.settings.os == "Android":
+                self.requires("qt/[~5.15.14]") # earlier versions have serious bugs
+            else:
+                self.requires("qt/[~5.15.2]")
 
     def validate(self):
         # FFmpeg
@@ -102,11 +108,11 @@ class VCMI(ConanFile):
             raise ConanInvalidConfiguration("LuaJIT can't be built for MSVC ARM64 at the moment, &:lua_lib option must be set to lua")
 
         # Qt
-        qtDep = self.dependencies["qt"]
-        if qtDep.options.qttools != True:
-            raise ConanInvalidConfiguration("qt:qttools option must be set to True")
-        if self.settings.os == "Android" and qtDep.options.qtandroidextras != True:
-            # TODO: in Qt 6 this option doesn't exist
-            raise ConanInvalidConfiguration("qt:qtandroidextras option for Android must be set to True")
-        if not is_apple_os(self) and qtDep.options.openssl != True:
-            raise ConanInvalidConfiguration("qt:openssl option for non-Apple OS must be set to True, otherwise mods can't be downloaded")
+        if self.options.qt_version != "None":
+            qtDep = self.dependencies["qt"]
+            if qtDep.options.qttools != True:
+                raise ConanInvalidConfiguration("qt:qttools option must be set to True")
+            if self.settings.os == "Android" and self.options.qt_version == 5 and qtDep.options.qtandroidextras != True:
+                raise ConanInvalidConfiguration("qt:qtandroidextras option for Android must be set to True")
+            if not is_apple_os(self) and qtDep.options.openssl != True:
+                raise ConanInvalidConfiguration("qt:openssl option for non-Apple OS must be set to True, otherwise mods can't be downloaded")
