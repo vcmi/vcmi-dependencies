@@ -1,5 +1,4 @@
 include(base/msvc-intel)
-include(base/msvc-win8)
 
 [settings]
 arch=x86_64
