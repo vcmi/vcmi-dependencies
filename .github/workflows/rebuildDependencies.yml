@@ -143,6 +143,7 @@ jobs:
         git sparse-checkout set \
           recipes/minizip \
           recipes/flac \
+          recipes/onnx \
           recipes/onnxruntime \
           $recipePathQt \
 
@@ -154,7 +155,7 @@ jobs:
 
         # versions must be synced with: conan_patches/<package>/conandata.yml
         # if no custom patches are required for a package, it should be removed from here
-        for p in minizip/1.3.1 flac/1.4.2 onnxruntime/1.18.1 ; do
+        for p in minizip/1.3.1 flac/1.4.2 onnx/1.16.2 onnxruntime/1.18.1 ; do
           IFS_OLD="$IFS"
           IFS=/
           read package version <<<"$p"
@@ -162,7 +163,7 @@ jobs:
 
           if [[ $package == qt ]] ; then
             packagePath="$recipePathQt/5.x.x"
-          elif [[ $package == onnxruntime ]] && ${{ contains(matrix.conan_options, 'with_onnxruntime=False') }} ; then
+          elif [[ $package =~ ^onnx ]] && ${{ contains(matrix.conan_options, 'with_onnxruntime=False') }} ; then
             continue
           else
             packagePath="recipes/$package/all"
