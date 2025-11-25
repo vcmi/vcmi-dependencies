@@ -7,7 +7,3 @@ patches:
     - patch_file: "patches/msvc-x86.diff"
       patch_description: |
         Fixes detection of x86 windows targets during cross-compilation.
-    - patch_file: "patches/win7.diff"
-      patch_description: |
-        Fixes compile errors on for windows 7 targets:
-        error C3861: 'CreateFile2': identifier not found

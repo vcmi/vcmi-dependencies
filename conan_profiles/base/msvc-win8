@@ -1,0 +1,12 @@
+[conf]
+# https://walbourn.github.io/a-brief-history-of-windows-sdks/
+# https://learn.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt
+# https://learn.microsoft.com/en-us/windows/win32/WinProg/using-the-windows-headers
+{% set _WIN32_WINNT_WIN8 = '0x0602' %}
+{% set NTDDI_WIN8 = '0x06020000' %}
+{% set win8_defines = [
+    '_WIN32_WINNT={}'.format(_WIN32_WINNT_WIN8),
+    'WINVER={}'.format(_WIN32_WINNT_WIN8),
+    'NTDDI_VERSION={}'.format(NTDDI_WIN8),
+] %}
+tools.build:defines={{ win8_defines }}

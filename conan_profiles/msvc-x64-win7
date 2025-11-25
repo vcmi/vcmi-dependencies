@@ -1,5 +1,5 @@
 include(base/msvc-intel)
-include(base/msvc-win8)
+include(base/msvc-win7)
 
 [settings]
-arch=x86
+arch=x86_64
