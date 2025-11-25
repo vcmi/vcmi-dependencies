@@ -1,4 +1,17 @@
+include(msvc)
+
+[settings]
+# https://blog.knatten.org/2022/08/26/microsoft-c-versions-explained/
+# https://learn.microsoft.com/en-us/cpp/overview/compiler-versions
+# https://github.com/actions/runner-images/blob/win25/20251102.77/images/windows/Windows2025-Readme.md#microsoft-visual-c
+# v144 / 14.44 / 19.44
+compiler.version=194
+compiler.update=4
+
 [conf]
+# VS 2022
+tools.microsoft.msbuild:vs_version=17
+
 # https://walbourn.github.io/a-brief-history-of-windows-sdks/
 # https://learn.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt
 # https://learn.microsoft.com/en-us/windows/win32/WinProg/using-the-windows-headers

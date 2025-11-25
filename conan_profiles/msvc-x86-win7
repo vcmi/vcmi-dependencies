@@ -1,4 +1,3 @@
-include(base/msvc-intel)
 include(base/msvc-win7)
 
 [settings]

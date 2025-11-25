@@ -1,4 +1,4 @@
-include(base/msvc)
+include(base/msvc-win8)
 
 [settings]
 arch=armv8
