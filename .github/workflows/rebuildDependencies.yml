@@ -45,18 +45,10 @@ jobs:
             os: windows-latest
             conan_profiles: '["msvc-x64"]'
             conan_options: -o "&:target_pre_windows10=True"
-          - platform: windows-x64-win7
-            os: windows-latest
-            conan_profiles: '["msvc-x64-win7"]'
-            conan_options: -o "&:target_pre_windows10=True" -o "&:with_onnxruntime=False"
           - platform: windows-x86
             os: windows-latest
             conan_profiles: '["msvc-x86"]'
             conan_options: -o "&:target_pre_windows10=True"
-          - platform: windows-x86-win7
-            os: windows-latest
-            conan_profiles: '["msvc-x86-win7"]'
-            conan_options: -o "&:target_pre_windows10=True" -o "&:with_onnxruntime=False"
           - platform: windows-arm64
             os: windows-11-arm
             conan_profiles: '["msvc-arm64"]'

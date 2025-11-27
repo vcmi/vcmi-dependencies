@@ -6,6 +6,7 @@ include(common)
 compiler=msvc
 compiler.cppstd={{ vars.cppstd }}
 compiler.runtime=dynamic
+compiler.version=194
 os=Windows
 
 [options]

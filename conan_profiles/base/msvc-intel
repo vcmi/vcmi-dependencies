@@ -3,7 +3,6 @@ include(msvc)
 [settings]
 # https://blog.knatten.org/2022/08/26/microsoft-c-versions-explained/
 # https://learn.microsoft.com/en-us/cpp/overview/compiler-versions
-# https://github.com/actions/runner-images/blob/win25/20251102.77/images/windows/Windows2025-Readme.md#microsoft-visual-c
 # v142 / 14.29 / 19.29
 compiler.version=192
 compiler.update=9
