@@ -119,7 +119,6 @@ jobs:
 
     - name: Build recipes with our patches
       run: |
-        set -x
         cciRepo='conan-center-index'
         branchName='master'
         recipePathQt='recipes/qt'
@@ -155,8 +154,6 @@ jobs:
 
           if [[ $package == qt ]] ; then
             packagePath="$recipePathQt/5.x.x"
-          elif [[ $package =~ ^onnx ]] && ${{ contains(matrix.conan_options, 'with_onnxruntime=False') }} ; then
-            continue
           else
             packagePath="recipes/$package/all"
           fi
@@ -228,7 +225,6 @@ jobs:
 
     - name: Remove build requirements' binaries
       run: |
-        set -x
         graphFile='graph.json'
         hostPackagesFile='packages-host.json'
         buildPackagesFile='packages-build.json'
