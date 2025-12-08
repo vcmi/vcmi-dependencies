@@ -19,6 +19,7 @@ class VCMI(ConanFile):
         "sdl_image/[^2.8.2]",
         "sdl_mixer/[^2.8.0]",
         "sdl_ttf/[^2.0.18]",
+        "libsquish/[^1.15]",
     ]
     _launcherRequires = [
         "xz_utils/[^5.2.5]", # innoextract

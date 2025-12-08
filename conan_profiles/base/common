@@ -219,6 +219,11 @@ sdl_mixer/*:modplug=False
 sdl_mixer/*:nativemidi=False
 sdl_mixer/*:tinymidi=False
 
+# libsquish
+# accelerate as much as possible
+libsquish/*:openmp=True
+libsquish/*:sse2_intrinsics=True
+
 # transitive deps, stuff that's not needed
 # doesn't link to bzip2 & zlib from "system" recipes
 pcre2/*:build_pcre2grep=False
