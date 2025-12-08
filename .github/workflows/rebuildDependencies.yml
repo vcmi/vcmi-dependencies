@@ -225,6 +225,7 @@ jobs:
 
     - name: Remove build requirements' binaries
       run: |
+        set -x
         graphFile='graph.json'
         hostPackagesFile='packages-host.json'
         buildPackagesFile='packages-build.json'
@@ -252,13 +253,13 @@ jobs:
 
         # Some are both build and host requirements and must not be removed
         # => exclude them from the list
-        cat $buildPackagesFile $hostPackagesFile | jq -s '
-          .[0]["Local Cache"] as $build_packages
-          | (.[1]["Local Cache"] | keys) as $host_package_names
-          | $build_packages
-          | with_entries(select(.key as $k | $host_package_names | index($k) == null)) as $packages
-          | {"Local Cache": $packages}
-        ' > $buildFilteredPackagesFile
+        python3 -c '
+        import json, sys
+        build_dict = json.load(open(sys.argv[1]))["Local Cache"]  # => {"pkg1": {...}, "pkg2": {...}, ...}
+        host_list = json.load(open(sys.argv[2]))["Local Cache"]  # => ["pkg1", "pkg2", ...]
+        filtered_dict = {k: v for k, v in build_dict.items() if k not in host_list}
+        json.dump({"Local Cache": filtered_dict}, open(sys.argv[3], "w"))
+        ' "$buildPackagesFile" "$hostPackagesFile" "$buildFilteredPackagesFile"
 
         conan remove --list "$buildFilteredPackagesFile" --confirm
 

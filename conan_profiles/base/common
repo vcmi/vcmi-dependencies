@@ -226,7 +226,7 @@ sqlite3/*:build_executable=False
 opusfile/*:http=False
 zstd/*:build_programs=False
 
-# Prevents libcurl dependency (fails to build due to system zlib)
+# Prevents onnxruntime->date->libcurl dependency
 # NOTE: use_system_tz_db is specific to date/3.0.1
 # Newer date recipes would need the tz_db=system option instead.
 date/*:use_system_tz_db=True
