@@ -225,7 +225,6 @@ jobs:
 
     - name: Remove build requirements' binaries
       run: |
-        set -x
         graphFile='graph.json'
         hostPackagesFile='packages-host.json'
         buildPackagesFile='packages-build.json'
