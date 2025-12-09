@@ -140,8 +140,7 @@ jobs:
 
         git checkout
 
-        # Patch conan recipe to prevent dragging libcurl as a dependency
-        # (can't be done via VCMI's conanfile as onnxruntime is built beforehand)
+        # Patch conan recipe to support msvc version 192
         git apply --ignore-whitespace ../conan_patches/onnxruntime/recipe.diff
 
         # versions must be synced with: conan_patches/<package>/conandata.yml
