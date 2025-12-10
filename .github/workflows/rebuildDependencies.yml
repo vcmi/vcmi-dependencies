@@ -232,9 +232,8 @@ jobs:
           $CONAN_PROFILES \
           ${{ matrix.conan_options }} \
           --format=json \
-          --build=never \
+          --build="*" \
           --no-remote \
-          --conf:all="tools.graph:skip_binaries=False" \
           > "$graphFile"
         conan list \
           --graph "$graphFile" \
@@ -242,6 +241,13 @@ jobs:
           --format=json \
           > "$packageListFile"
         conan remove --list "$packageListFile" --confirm
+    - name: Upload JSON graphs
+      uses: actions/upload-artifact@v4
+      with:
+        name: JSON graphs ${{ matrix.platform }}
+        path: |
+          graph.json
+          pkglist.json
 
     - name: Create list of built packages
       run: |
