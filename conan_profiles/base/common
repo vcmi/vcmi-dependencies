@@ -219,9 +219,19 @@ sdl_mixer/*:modplug=False
 sdl_mixer/*:nativemidi=False
 sdl_mixer/*:tinymidi=False
 
+# libsquish
+# accelerate as much as possible
+libsquish/*:openmp=True
+libsquish/*:sse2_intrinsics=True
+
 # transitive deps, stuff that's not needed
 # doesn't link to bzip2 & zlib from "system" recipes
 pcre2/*:build_pcre2grep=False
 sqlite3/*:build_executable=False
 opusfile/*:http=False
 zstd/*:build_programs=False
+
+# Prevents onnxruntime->date->libcurl dependency
+# NOTE: use_system_tz_db is specific to date/3.0.1
+# Newer date recipes would need the tz_db=system option instead.
+date/*:use_system_tz_db=True
