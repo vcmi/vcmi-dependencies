@@ -225,41 +225,23 @@ jobs:
     - name: Remove build requirements' binaries
       run: |
         graphFile='graph.json'
-        hostPackagesFile='packages-host.json'
-        buildPackagesFile='packages-build.json'
-        buildFilteredPackagesFile='packages-build-filtered.txt'
+        packageListFile='pkglist.json'
 
+        # the special conf is a workaround for https://github.com/conan-io/conan/issues/19366
         conan graph info . \
           $CONAN_PROFILES \
           ${{ matrix.conan_options }} \
           --format=json \
           --build=never \
           --no-remote \
+          --conf:all="tools.graph:skip_binaries=False" \
           > "$graphFile"
-
         conan list \
           --graph "$graphFile" \
           --graph-context=build-only \
           --format=json \
-          > $buildPackagesFile
-
-        conan list \
-          --graph "$graphFile" \
-          --graph-context=host \
-          --format=json \
-          > $hostPackagesFile
-
-        # Some are both build and host requirements and must not be removed
-        # => exclude them from the list
-        python3 -c '
-        import json, sys
-        build_dict = json.load(open(sys.argv[1]))["Local Cache"]  # => {"pkg1": {...}, "pkg2": {...}, ...}
-        host_list = json.load(open(sys.argv[2]))["Local Cache"]  # => ["pkg1", "pkg2", ...]
-        filtered_dict = {k: v for k, v in build_dict.items() if k not in host_list}
-        json.dump({"Local Cache": filtered_dict}, open(sys.argv[3], "w"))
-        ' "$buildPackagesFile" "$hostPackagesFile" "$buildFilteredPackagesFile"
-
-        conan remove --list "$buildFilteredPackagesFile" --confirm
+          > "$packageListFile"
+        conan remove --list "$packageListFile" --confirm
 
     - name: Create list of built packages
       run: |
