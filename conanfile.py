@@ -30,7 +30,7 @@ class VCMI(ConanFile):
         "target_pre_windows10": [True, False],
         "with_ffmpeg": [True, False],
         "with_onnxruntime": [True, False],
-        "lua_lib": [None, "luajit", "lua"]
+        "lua_lib": ["None", "luajit", "lua"],
     }
     default_options = {
         "target_pre_windows10": False,
@@ -62,7 +62,7 @@ class VCMI(ConanFile):
         else:
             self.requires(f"boost/[^{boostMinVersion}]")
 
-        if self.options.lua_lib:
+        if self.options.lua_lib != "None":
             lib = str(self.options.lua_lib)
             libVersion = {
                 "lua": "[^5.4.7]",
