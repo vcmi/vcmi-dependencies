@@ -30,18 +30,22 @@ class VCMI(ConanFile):
         "target_pre_windows10": [True, False],
         "with_ffmpeg": [True, False],
         "with_onnxruntime": [True, False],
+        "with_discord_presence": [True, False],
         "lua_lib": ["None", "luajit", "lua"],
     }
     default_options = {
         "target_pre_windows10": False,
         "with_ffmpeg": True,
         "with_onnxruntime": True,
+        "with_discord_presence": True,
         "lua_lib": "luajit",
     }
 
     def config_options(self):
+        isMobile = self.settings.os == "iOS" or self.settings.os == "Android"
+
         # static on "single app" platforms
-        isSdlShared = not (self.settings.os == "iOS" or self.settings.os == "Android")
+        isSdlShared = not isMobile
         self.options["sdl"].shared = isSdlShared
         self.options["sdl_image"].shared = isSdlShared
         self.options["sdl_mixer"].shared = isSdlShared
@@ -52,6 +56,9 @@ class VCMI(ConanFile):
 
         if self.settings.os != "Windows":
             del self.options.target_pre_windows10
+
+        if isMobile:
+            del self.options.with_discord_presence
 
     def requirements(self):
         # lib
@@ -73,6 +80,10 @@ class VCMI(ConanFile):
         # client
         if self.options.with_ffmpeg:
             self.requires("ffmpeg/[>=4.4]")
+
+        if self.options.get_safe("with_discord_presence", False):
+            self.requires("fmt/[>=12.1.0]")
+            self.requires("glaze/[>=5.5.4]")
 
         # TODO: try enabling version range once there's no conflict
         # sdl_image & sdl_ttf depend on earlier version
