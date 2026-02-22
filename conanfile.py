@@ -122,6 +122,8 @@ class VCMI(ConanFile):
         qtDep = self.dependencies["qt"]
         if qtDep.options.qttools != True:
             raise ConanInvalidConfiguration("qt:qttools option must be set to True")
+        if qtDep.options.with_md4c != True:
+            raise ConanInvalidConfiguration("qt:with_md4c option must be set to True")
         if self.settings.os == "Android" and qtDep.options.qtandroidextras != True:
             # TODO: in Qt 6 this option doesn't exist
             raise ConanInvalidConfiguration("qt:qtandroidextras option for Android must be set to True")
