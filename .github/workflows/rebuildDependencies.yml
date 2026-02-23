@@ -68,7 +68,7 @@ jobs:
     - name: Define common variables
       run: |
         echo CUSTOM_PATCHES_PATH="$PWD/conan_patches" >> "$GITHUB_ENV"
-        echo DEPS_FILE="dependencies-${{ matrix.platform }}.tgz" >> "$GITHUB_ENV"
+        echo DEPS_FILE="dependencies-${{ matrix.platform }}.txz" >> "$GITHUB_ENV"
         echo DEPS_LIST_FILE="dependencies-${{ matrix.platform }}.txt" >> "$GITHUB_ENV"
 
         # builds a list of profile parameters, poor man's `map` function
