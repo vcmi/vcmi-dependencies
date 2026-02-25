@@ -60,6 +60,12 @@ class VCMI(ConanFile):
         if isMobile:
             del self.options.with_discord_presence
 
+    def configure(self):
+        if is_msvc(self):
+            # required because VCMI uses dynamic runtime
+            self.options["boost"].shared = True
+            self.options["ffmpeg"].shared = True
+
     def requirements(self):
         # lib
         # boost::filesystem removed support for Windows < 10 in v1.87
@@ -105,10 +111,6 @@ class VCMI(ConanFile):
             self.requires("onnxruntime/1.18.1")
 
     def validate(self):
-        # FFmpeg
-        if is_msvc(self) and self.options.with_ffmpeg and self.dependencies["ffmpeg"].options.shared != True:
-            raise ConanInvalidConfiguration("MSVC FFmpeg static build requires static runtime, but VCMI uses dynamic runtime. You must build FFmpeg as shared.")
-
         # SDL
         sdl2mainValue = self.settings.os != "iOS"
         if self.dependencies["sdl"].options.sdl2main != sdl2mainValue:
