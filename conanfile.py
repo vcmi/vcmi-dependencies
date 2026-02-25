@@ -67,6 +67,13 @@ class VCMI(ConanFile):
             self.options["ffmpeg"].shared = True
 
     def requirements(self):
+        # onnxruntime depends on exact boost version
+        # placing it before our boost requirement ensures that this version will be in the graph to prevent conflicts like:
+        # Conflict between boost/1.83.0 and boost/1.90.0 in the graph.
+        # see https://docs.conan.io/2/knowledge/faq.html#getting-version-conflicts-even-when-using-version-ranges
+        if self.options.with_onnxruntime:
+            self.requires("onnxruntime/1.18.1")
+
         # lib
         # boost::filesystem removed support for Windows < 10 in v1.87
         boostMinVersion = "1.74"
@@ -106,9 +113,6 @@ class VCMI(ConanFile):
             self.requires("qt/[~5.15.14]") # earlier versions have serious bugs
         else:
             self.requires("qt/[~5.15.2]")
-
-        if self.options.with_onnxruntime:
-            self.requires("onnxruntime/1.18.1")
 
     def validate(self):
         # SDL
