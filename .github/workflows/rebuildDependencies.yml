@@ -71,10 +71,6 @@ jobs:
         echo DEPS_FILE="dependencies-${{ matrix.platform }}.txz" >> "$GITHUB_ENV"
         echo DEPS_LIST_FILE="dependencies-${{ matrix.platform }}.txt" >> "$GITHUB_ENV"
 
-        # builds a list of profile parameters, poor man's `map` function
-        profiles="${{ join(fromJSON(matrix.conan_profiles), ' --profile=$PWD/conan_profiles/') }}"
-        echo CONAN_PROFILES="--profile=$PWD/conan_profiles/$profiles" >> "$GITHUB_ENV"
-
     - name: Prepare CI
       if: ${{ matrix.before_install }}
       run: ci/${{ matrix.before_install }}
@@ -100,13 +96,29 @@ jobs:
     # https://github.com/actions/runner-images/tree/main/images
     - name: Prepare platform tools
       run: |
-        echo "
+        cmake="cmake/3.31.6"
+        ninja="ninja/1.13.2"
+
+        platformTools="
         [platform_tool_requires]
-        cmake/3.31.6
-        ninja/1.13.2
+        $cmake
+        $ninja
+
+        [replace_tool_requires]
+        cmake/*: $cmake
+        ninja/*: $ninja
 
         [conf]
-        tools.cmake.cmaketoolchain:generator=Ninja" >> $(conan profile path default)
+        tools.cmake.cmaketoolchain:generator=Ninja"
+
+        echo "$platformTools" >> $(conan profile path default)
+
+        platformToolsProfile="$PWD/platformTools"
+        echo "$platformTools" > "$platformToolsProfile"
+
+        # builds a list of profile parameters, poor man's `map` function
+        profiles="${{ join(fromJSON(matrix.conan_profiles), ' --profile=$PWD/conan_profiles/') }}"
+        echo CONAN_PROFILES="--profile=$PWD/conan_profiles/$profiles --profile=$platformToolsProfile" >> "$GITHUB_ENV"
 
     - name: Install system libs recipes
       if: ${{ matrix.conan_system_libs }}
