@@ -120,6 +120,20 @@ jobs:
         profiles="${{ join(fromJSON(matrix.conan_profiles), ' --profile=$PWD/conan_profiles/') }}"
         echo CONAN_PROFILES="--profile=$PWD/conan_profiles/$profiles --profile=$platformToolsProfile" >> "$GITHUB_ENV"
 
+    - name: Configure MSYS2
+      if: ${{ startsWith(matrix.platform, 'windows') && matrix.platform != 'windows-arm64' }}
+      shell: pwsh
+      run: |
+        $msysBash = "C:\msys64\usr\bin\bash.exe"
+
+        # appends to [conf]
+        Add-Content -Path platformTools -Value @"
+        tools.microsoft.bash:path=$msysBash
+        tools.microsoft.bash:subsystem=msys2
+        "@
+
+        Invoke-Expression "& $msysBash -l -c 'pacman -S base-devel gcc --noconfirm'"
+
     - name: Install system libs recipes
       if: ${{ matrix.conan_system_libs }}
       run: |
