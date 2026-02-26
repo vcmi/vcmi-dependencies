@@ -3,7 +3,7 @@ build_type=Release
 
 [platform_tool_requires]
 cmake/3.31.6
-ninja/1.12.1
+ninja/1.13.2
 
 [replace_requires]
 
