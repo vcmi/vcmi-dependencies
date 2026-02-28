@@ -44,6 +44,18 @@ class VCMI(ConanFile):
     def config_options(self):
         isMobile = self.settings.os == "iOS" or self.settings.os == "Android"
 
+        # shared options should be synced with conan_profiles/base/common (and possibly others)
+        self.options["boost"].shared = True
+        self.options["bzip2"].shared = True
+        self.options["libiconv"].shared = True
+        self.options["libpng"].shared = True
+        self.options["minizip"].shared = True
+        self.options["ogg"].shared = True
+        self.options["opus"].shared = True
+        self.options["qt"].shared = self.settings.os != "iOS"
+        self.options["xz_utils"].shared = True
+        self.options["zlib"].shared = True
+
         # static on "single app" platforms
         isSdlShared = not isMobile
         self.options["sdl"].shared = isSdlShared
@@ -51,8 +63,12 @@ class VCMI(ConanFile):
         self.options["sdl_mixer"].shared = isSdlShared
         self.options["sdl_ttf"].shared = isSdlShared
 
+        self.options["qt"].openssl = not is_apple_os(self)
+        self.options["qt"].qtsvg = True
         if self.settings.os == "Android":
             self.options["qt"].android_sdk = getenv("ANDROID_HOME")
+        if isMobile:
+            self.options["qt"].opengl = "es2"
 
         if self.settings.os != "Windows":
             del self.options.target_pre_windows10
@@ -60,7 +76,16 @@ class VCMI(ConanFile):
         if isMobile:
             del self.options.with_discord_presence
 
+    # hard requirements on dependencies' options
     def configure(self):
+        self.options["sdl"].sdl2main = self.settings.os != "iOS"
+
+        self.options["qt"].qttools = True
+        self.options["qt"].with_md4c = True
+        if self.settings.os == "Android":
+            # TODO: in Qt 6 this option doesn't exist
+            self.options["qt"].qtandroidextras = True
+
         if is_msvc(self):
             # required because VCMI uses dynamic runtime
             self.options["boost"].shared = True
@@ -110,23 +135,5 @@ class VCMI(ConanFile):
             self.requires("qt/[~5.15.2]")
 
     def validate(self):
-        # SDL
-        sdl2mainValue = self.settings.os != "iOS"
-        if self.dependencies["sdl"].options.sdl2main != sdl2mainValue:
-            raise ConanInvalidConfiguration(f"sdl:sdl2main option for {self.settings.os} must be set to {sdl2mainValue}")
-
-        # LuaJIT
-        if is_msvc(self) and self.settings.arch == "armv8" and self.options.lua_lib == "luajit":
-            raise ConanInvalidConfiguration("LuaJIT can't be built for MSVC ARM64 at the moment, &:lua_lib option must be set to lua")
-
-        # Qt
-        qtDep = self.dependencies["qt"]
-        if qtDep.options.qttools != True:
-            raise ConanInvalidConfiguration("qt:qttools option must be set to True")
-        if qtDep.options.with_md4c != True:
-            raise ConanInvalidConfiguration("qt:with_md4c option must be set to True")
-        if self.settings.os == "Android" and qtDep.options.qtandroidextras != True:
-            # TODO: in Qt 6 this option doesn't exist
-            raise ConanInvalidConfiguration("qt:qtandroidextras option for Android must be set to True")
-        if not is_apple_os(self) and qtDep.options.openssl != True:
-            raise ConanInvalidConfiguration("qt:openssl option for non-Apple OS must be set to True, otherwise mods can't be downloaded")
+        if not is_apple_os(self) and self.dependencies["qt"].options.openssl != True:
+            self.output.warning("qt:openssl option for non-Apple OS should be set to True, otherwise mods can't be downloaded")
