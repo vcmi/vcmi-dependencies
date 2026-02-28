@@ -98,15 +98,10 @@ class VCMI(ConanFile):
             self.requires("fmt/[>=12.1.0]")
             self.requires("glaze/[>=5.5.4]")
 
-        # TODO: try enabling version range once there's no conflict
-        # sdl_image & sdl_ttf depend on earlier version
-        # ERROR: Version conflict: Conflict between sdl/2.28.5 and sdl/2.28.3 in the graph.
-        # Conflict originates from sdl_mixer/2.8.0
         # upcoming SDL version 3.0+ is not supported at the moment due to API breakage
         # SDL versions between 2.22-2.26.1 have broken sound
-        # self.requires("sdl/[^2.26.1 || >=2.0.20 <=2.22.0]")
         # versions before 2.30.7 don't build for Android with NDK 27: https://github.com/libsdl-org/SDL/issues/9792
-        self.requires("sdl/2.32.2", override=True)
+        self.requires("sdl/[^2.30.7]")
 
         # launcher
         if self.settings.os == "Android":
