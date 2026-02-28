@@ -96,7 +96,7 @@ jobs:
     # https://github.com/actions/runner-images/tree/main/images
     - name: Prepare platform tools
       run: |
-        cmake="cmake/3.31.6"
+        cmake="cmake/${CI_CMAKE_VERSION:-3.31.6}"
         ninja="ninja/1.13.2"
 
         platformTools="
