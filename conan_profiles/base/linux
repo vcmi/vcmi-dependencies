@@ -1,0 +1,25 @@
+{% import 'vars.jinja' as vars %}
+
+include(common)
+
+[settings]
+compiler=gcc
+compiler.cppstd={{ vars.cppstd }}
+compiler.libcxx=libstdc++
+compiler.version=13
+os=Linux
+
+{{ vars.glaze_cppstd }}
+
+[options]
+qt/*:with_freetype=True
+sdl_image/*:imageio=True
+ffmpeg/*:avdevice=True
+libiconv/*:shared=False
+
+[replace_requires]
+xkbcommon/*:xkbcommon/1.6.0
+
+[conf]
+tools.system.package_manager:mode=install
+tools.system.package_manager:sudo=True
