@@ -1,7 +1,7 @@
-From 96b2ca157e2d1214438ed5aa9e31ba3a205aef68 Mon Sep 17 00:00:00 2001
+From 6e474654cc934365198980d8c11077187194a002 Mon Sep 17 00:00:00 2001
 From: Edward Welbourne <edward.welbourne@qt.io>
 Date: Wed, 2 Jun 2021 12:14:31 +0200
-Subject: [PATCH 009/130] Fix copy-and-paste bug in QDTEP::getMaximum()
+Subject: [PATCH 009/109] Fix copy-and-paste bug in QDTEP::getMaximum()
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

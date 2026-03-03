@@ -1,7 +1,7 @@
-From 5761fc24f3cf015428dd4816800e3142e44a6b8d Mon Sep 17 00:00:00 2001
+From 260241dc4e359e1623bd1fedca5902e02872bdee Mon Sep 17 00:00:00 2001
 From: Luca Beldi <v.ronin@yahoo.it>
 Date: Fri, 23 Apr 2021 15:35:29 +0100
-Subject: [PATCH 005/130] Fix QAbstractItemModelTester false positive
+Subject: [PATCH 005/109] Fix QAbstractItemModelTester false positive
 
 When inserting rows to a branch with no columns
 the tester should not complain about indexes being invalid

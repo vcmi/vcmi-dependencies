@@ -9,5 +9,7 @@ compiler.runtime=dynamic
 compiler.version=194
 os=Windows
 
+{{ vars.glaze_cppstd }}
+
 [options]
 ffmpeg/*:shared=True
