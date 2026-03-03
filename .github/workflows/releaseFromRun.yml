@@ -49,7 +49,7 @@ jobs:
           </details>"""
 
           tag = str(date.today())
-          dependencies = glob(f"{getenv("DEPENDENCIES_DIR")}/**/*.tgz")
+          dependencies = glob(f"{getenv("DEPENDENCIES_DIR")}/**/*.txz")
           run([
               "gh", "release", "create", tag,
               "--repo", "${{ github.repository }}",
