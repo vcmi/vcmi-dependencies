@@ -13,7 +13,7 @@ os=Linux
 
 [options]
 qt/*:with_freetype=True
-ffmpeg/*:avdevice=True
+ffmpeg/*:with_libalsa=False
 # fixing wayland-scanner not finding libiconv
 libiconv/*:shared=False
 
