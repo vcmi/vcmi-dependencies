@@ -2,3 +2,11 @@ include(base/msvc-intel)
 
 [settings]
 arch=x86
+
+[options]
+# MSVC link.exe hangs when creating avcodec-62.dll for x86 targets:
+# the makedef-generated .def file with underscore-prefixed symbols (EXTERN_PREFIX="_")
+# causes extremely slow symbol processing in the linker.
+# x64/arm64 don't have this issue (EXTERN_PREFIX="").
+# Building FFmpeg as static avoids DLL/.def creation entirely.
+ffmpeg/*:shared=False
