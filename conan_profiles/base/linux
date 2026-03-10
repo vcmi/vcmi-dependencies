@@ -14,12 +14,12 @@ os=Linux
 [options]
 qt/*:with_freetype=True
 
-# fixing wayland-scanner not finding libiconv
-libiconv/*:shared=False
+wayland/*:shared=True
+xkbcommon/*:shared=True
 
 [replace_requires]
 # conflict with qt (xkbcommon 1.5.0)
-xkbcommon/*:xkbcommon/1.6.0
+xkbcommon/*: xkbcommon/1.6.0
 
 [conf]
 tools.system.package_manager:mode=install
