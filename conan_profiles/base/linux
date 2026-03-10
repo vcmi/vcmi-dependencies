@@ -14,6 +14,15 @@ os=Linux
 [options]
 qt/*:with_freetype=True
 
+ffmpeg/*:with_libalsa=False
+ffmpeg/*:with_libdrm=False
+ffmpeg/*:with_pulse=False
+ffmpeg/*:with_vaapi=False
+ffmpeg/*:with_vdpau=False
+ffmpeg/*:with_vulkan=False
+ffmpeg/*:with_xcb=False
+ffmpeg/*:with_xlib=False
+
 wayland/*:shared=True
 xkbcommon/*:shared=True
 
