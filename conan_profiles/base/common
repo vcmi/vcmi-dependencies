@@ -5,6 +5,7 @@ build_type=Release
 # shared (dynamic) libs
 boost/*:shared=True
 bzip2/*:shared=True
+ffmpeg/*:shared=True
 libiconv/*:shared=True
 libpng/*:shared=True
 minizip/*:shared=True
