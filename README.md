@@ -16,6 +16,4 @@ Current flow to update dependencies:
   - https://docs.conan.io/2/reference/conan_server.html (not recommended by Conan)
   - https://jfrog.com/
 
-- Rebuild ffmpeg with libdav1d and av1 support enabled. Needs investigation as to why dav1d fails to build on mingw and on android.
-
 - Run CI with full package rebuild on schedule (weekly? monthly?) to detect any regressions or breaking changes in CI or in used recipes

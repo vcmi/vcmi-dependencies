@@ -65,10 +65,9 @@ ffmpeg/*:disable_all_muxers=True
 ffmpeg/*:disable_all_parsers=True
 ffmpeg/*:disable_all_protocols=True
 
-ffmpeg/*:with_asm=False
 ffmpeg/*:with_freetype=False
 ffmpeg/*:with_libaom=False
-ffmpeg/*:with_libdav1d=False
+ffmpeg/*:with_libdav1d=True
 ffmpeg/*:with_libfdk_aac=False
 ffmpeg/*:with_libiconv=False
 ffmpeg/*:with_libmp3lame=False
@@ -88,12 +87,12 @@ ffmpeg/*:with_vorbis=False
 # We want following options supported:
 # H3:SoD - .bik and .smk
 # H3:HD  -  ogg container / theora video / vorbis sound (not supported by VCMI at the moment, but might be supported in future)
-# and for mods - webm container / vp8 or vp9 video / opus sound
-# TODO: add av1 support for mods (requires enabling libdav1d)
+# and for mods - webm container / vp8, vp9 or av1 video / vorbis or opus sound
 {% set ffDecoders = [
     'bink',
     'binkaudio_dct',
     'binkaudio_rdft',
+    'libdav1d',
     'opus',
     'smackaud',
     'smacker',
@@ -107,9 +106,10 @@ ffmpeg/*:with_vorbis=False
     'binka',
     'ogg',
     'smacker',
-    'webm_dash_manifest',
+    'matroska',
 ] %}
 {% set ffParsers = [
+    'av1',
     'opus',
     'vorbis',
     'vp8',
