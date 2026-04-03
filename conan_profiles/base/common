@@ -100,6 +100,9 @@ ffmpeg/*:with_vorbis=False
     'vorbis',
     'vp8',
     'vp9',
+    'mpeg1video',
+    'mp2',
+    'mjpeg',
 ] %}
 {% set ffDemuxers = [
     'bink',
@@ -107,6 +110,9 @@ ffmpeg/*:with_vorbis=False
     'ogg',
     'smacker',
     'matroska',
+    'mpeg1video',
+    'mp2',
+    'mjpeg',
 ] %}
 {% set ffParsers = [
     'av1',
@@ -115,6 +121,8 @@ ffmpeg/*:with_vorbis=False
     'vp8',
     'vp9',
     'webp',
+    'mpeg',
+    'smjpeg',
 ] %}
 {% set ffProtocols = [
     'file',
