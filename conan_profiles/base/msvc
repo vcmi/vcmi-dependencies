@@ -13,3 +13,4 @@ os=Windows
 
 [options]
 ffmpeg/*:shared=True
+qt/*:shared=False
