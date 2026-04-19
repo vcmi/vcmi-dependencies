@@ -128,6 +128,8 @@ class VCMI(ConanFile):
         # versions before 2.30.7 don't build for Android with NDK 27: https://github.com/libsdl-org/SDL/issues/9792
         self.requires("sdl/[^2.30.7]")
 
+        self.requires("openssl/[^3.2]")
+
         # launcher
         if self.settings.os == "Android":
             self.requires("qt/[~5.15.14]") # earlier versions have serious bugs
