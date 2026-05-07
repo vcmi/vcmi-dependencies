@@ -18,17 +18,17 @@ jobs:
       matrix:
         include:
           - platform: mac-intel
-            os: macos-14
+            os: macos-15
             before_install: macos.sh
             conan_profiles: '["macos-intel", "base/apple-system"]'
             conan_system_libs: bzip2 libiconv sqlite3 zlib
           - platform: mac-arm
-            os: macos-14
+            os: macos-15
             before_install: macos.sh
             conan_profiles: '["macos-arm", "base/apple-system"]'
             conan_system_libs: bzip2 libiconv sqlite3 zlib
           - platform: ios
-            os: macos-14
+            os: macos-15
             before_install: macos.sh
             conan_profiles: '["ios-arm64", "base/apple-system"]'
             conan_system_libs: bzip2 libiconv sqlite3 zlib
