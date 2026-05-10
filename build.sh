@@ -18,11 +18,20 @@ else
 	python=python
 fi
 
-error() {
-	red='\033[0;31m'
+colored_echo() {
 	reset='\033[0m'
-	printf "${red}%s${reset}\n" "$1"
+	printf "\\033[0;${1}m%s${reset}\n" "$2"
+}
+
+error() {
+	red=31
+	colored_echo $red "$1"
 	exit 1
+}
+
+print_current_step() {
+	green=32
+	[ "${BUILD_ACTION:-}" ] || colored_echo $green "executing step: ${FUNCNAME[1]}"
 }
 
 # performs `pushd` inside the cloned repo
@@ -82,6 +91,7 @@ build_recipes() {
 
 # required: CONAN_PROFILES_JSON_ARRAY env var
 prepare() {
+	print_current_step
 	if [ -z "${CONAN_PROFILES_JSON_ARRAY:-}" ] ; then
 		error "CONAN_PROFILES_JSON_ARRAY env var not set"
 	fi
@@ -120,6 +130,7 @@ print(" ".join(profilePaths))
 }
 
 install_system_libs() {
+	print_current_step
 	if [ -z "${CONAN_SYSTEM_LIBS:-}" ] ; then
 		echo 'no system libs defined, skip'
 		return
@@ -135,6 +146,7 @@ install_system_libs() {
 }
 
 build_recipes_with_patches() {
+	print_current_step
 	clone_repo "https://github.com/conan-io/$cciRepoName" "$cciRepoName" master \
 		recipes/minizip \
 		recipes/onnx \
@@ -150,6 +162,7 @@ build_recipes_with_patches() {
 }
 
 build_onnx_recipes_with_patches() {
+	print_current_step
 	pushd "$tempDir/$cciRepoName"
 
 	# parent of d6cf51e85d5c869bc794a6f68efc5a55834c806e where ONNX* recipes changed
@@ -168,6 +181,7 @@ build_onnx_recipes_with_patches() {
 }
 
 build_recipes_from_cci_pull_requests() {
+	print_current_step
     # TODO: remove LuaJIT when https://github.com/conan-io/conan-center-index/pull/26577 is merged
     # TODO: remove Qt5 when the following are merged:
 	# - https://github.com/conan-io/conan-center-index/pull/28251
@@ -187,6 +201,7 @@ build_recipes_from_cci_pull_requests() {
 }
 
 build_normal_recipes() {
+	print_current_step
 	conan install "$scriptDir" \
 		--output-folder=conan-generated \
 		--build=missing \
