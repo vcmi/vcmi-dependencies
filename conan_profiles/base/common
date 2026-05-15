@@ -110,8 +110,8 @@ ffmpeg/*:with_vorbis=False
     'ogg',
     'smacker',
     'matroska',
-    'mpeg1video',
-    'mp2',
+    'mpegvideo',
+    'mp3',
     'mjpeg',
 ] %}
 {% set ffParsers = [
@@ -121,8 +121,9 @@ ffmpeg/*:with_vorbis=False
     'vp8',
     'vp9',
     'webp',
-    'mpeg',
-    'smjpeg',
+    'mpegvideo',
+    'mpegaudio',
+    'mjpeg',
 ] %}
 {% set ffProtocols = [
     'file',
