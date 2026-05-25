@@ -111,14 +111,6 @@ jobs:
       run: |
         BUILD_ACTION=prepare ./build.sh >> "$GITHUB_ENV"
 
-    - name: Configure VS version for Conan (Windows)
-      if: ${{ startsWith(matrix.platform, 'windows') }}
-      shell: pwsh
-      run: |
-        $platformToolsPath = Join-Path -Path $env:RUNNER_TEMP -ChildPath platformTools
-        Add-Content -Path $platformToolsPath -Value "tools.microsoft.msbuild:vs_version=$env:MSBUILD_VS_VERSION"
-        Write-Host "Configured tools.microsoft.msbuild:vs_version=$env:MSBUILD_VS_VERSION"
-
     - name: Configure MSYS2
       if: ${{ startsWith(matrix.platform, 'windows') }}
       shell: pwsh
