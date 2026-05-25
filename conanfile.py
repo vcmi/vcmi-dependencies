@@ -12,6 +12,7 @@ class VCMI(ConanFile):
 
     _libRequires = [
         "zlib/[^1.2.12]",
+        "libiconv/1.17",
     ]
     _clientRequires = [
         "libsquish/[^1.15]",

@@ -19,17 +19,25 @@ xz_utils/*:shared=True
 zlib/*:shared=True
 
 # Boost
-# we need only the following parts:
-# date_time filesystem iostreams locale program_options system
-# some other parts are also enabled because they're dependents
+# we need only the following parts and their dependencies:
+# date_time: (none)
+# filesystem: atomic, system
+# iostreams: random, regex
+# program_options: (none)
 # see e.g. conan-center-index/recipes/boost/all/dependencies
+boost/*:without_charconv=True
+boost/*:without_chrono=True
+boost/*:without_cobalt=True
+boost/*:without_container=True
 boost/*:without_context=True
 boost/*:without_contract=True
 boost/*:without_coroutine=True
+boost/*:without_exception=True
 boost/*:without_fiber=True
 boost/*:without_graph=True
 boost/*:without_graph_parallel=True
 boost/*:without_json=True
+boost/*:without_locale=True
 boost/*:without_log=True
 boost/*:without_math=True
 boost/*:without_mpi=True
@@ -39,6 +47,7 @@ boost/*:without_python=True
 boost/*:without_serialization=True
 boost/*:without_stacktrace=True
 boost/*:without_test=True
+boost/*:without_thread=True
 boost/*:without_timer=True
 boost/*:without_type_erasure=True
 boost/*:without_wave=True
