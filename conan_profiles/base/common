@@ -94,8 +94,9 @@ ffmpeg/*:with_ssl=False
 ffmpeg/*:with_vorbis=False
 
 # We want following options supported:
-# H3:SoD - .bik and .smk
-# H3:HD  -  ogg container / theora video / vorbis sound (not supported by VCMI at the moment, but might be supported in future)
+# H3:SoD  - .bik and .smk
+# H3:HD   -  ogg container / theora video / vorbis sound (not supported by VCMI at the moment, but might be supported in future)
+# H3:Demo - .mpg (mpeg1 video / mp2 audio) and .mjpg
 # and for mods - webm container / vp8, vp9 or av1 video / vorbis or opus sound
 {% set ffDecoders = [
     'bink',
@@ -119,6 +120,7 @@ ffmpeg/*:with_vorbis=False
     'ogg',
     'smacker',
     'matroska',
+    'mpegps',
     'mpegvideo',
     'mp3',
     'mjpeg',
