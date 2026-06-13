@@ -10,7 +10,6 @@ tempDir="${tempDir//\\//}" # for Windows
 scriptDir=$(cd "$(dirname "$0")" && pwd)
 cciRecipePathQt='recipes/qt'
 cciRepoName='conan-center-index'
-conanOptionOrdinaryLuaLib='&:lua_lib=lua'
 conanOptionTargetPreWindows10='&:target_pre_windows10=True'
 if command -v python3 >/dev/null ; then
 	python=python3
@@ -187,7 +186,9 @@ build_recipes_from_cci_pull_requests() {
 	# - https://github.com/conan-io/conan-center-index/pull/28251
 	# - https://github.com/conan-io/conan-center-index/pull/29299
 
-	[[ "${CONAN_OPTIONS:-}" == *"$conanOptionOrdinaryLuaLib"* ]] || buildLuaJit=1
+	if [[ -z "${CONAN_OPTIONS:-}" || "$CONAN_OPTIONS" == *"lua_lib=luajit"* ]]; then
+		buildLuaJit=1
+	fi
 
 	clone_repo "https://github.com/kambala-decapitator/$cciRepoName" cci-fork vcmi \
 		${buildLuaJit:+ recipes/luajit} \
@@ -268,7 +269,7 @@ case "$platform" in
 		;;
 	windows-arm64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-arm64"]'
-		CONAN_OPTIONS="--options '$conanOptionOrdinaryLuaLib'"
+		CONAN_OPTIONS="--options '&:lua_lib=lua'"
 		;;
 	windows-x64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-x64"]'
