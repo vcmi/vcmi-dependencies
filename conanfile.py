@@ -124,6 +124,7 @@ class VCMI(ConanFile):
 
         # client
         if self.options.with_ffmpeg:
+            self.requires("opus/[<1.6]") # 1.6 doesn't build for Windows ARM: https://github.com/xiph/opus/pull/478
             self.requires("ffmpeg/[>=4.4]")
 
         if self.options.get_safe("with_discord_presence", False):
