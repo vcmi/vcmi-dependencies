@@ -153,6 +153,9 @@ ffmpeg/*:enable_protocols={{ ffProtocols|join(',') }}
 # Lua
 lua/*:compile_as_cpp=True
 
+# LuaJIT
+luajit/*:with_gc64=True
+
 # oneTBB
 onetbb/*:tbbbind=False
 onetbb/*:tbbmalloc=False
