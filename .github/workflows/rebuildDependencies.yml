@@ -18,15 +18,15 @@ jobs:
       matrix:
         include:
           - platform: mac-intel
-            os: macos-15
+            os: macos-26
             before_install: macos.sh
 
           - platform: mac-arm
-            os: macos-15
+            os: macos-26
             before_install: macos.sh
 
           - platform: ios
-            os: macos-15
+            os: macos-26
             before_install: macos.sh
 
           - platform: android-armeabi-v7a
