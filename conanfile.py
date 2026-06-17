@@ -11,6 +11,7 @@ class VCMI(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
 
     _libRequires = [
+        "minizip/[^1.2.12]",
         "zlib/[^1.2.12]",
         "libiconv/1.17",
     ]
@@ -106,13 +107,6 @@ class VCMI(ConanFile):
             self.requires(f"boost/[>={boostMinVersion} <1.87]")
         else:
             self.requires(f"boost/[^{boostMinVersion}]")
-
-        # v1.3.2 is broken for Android, see https://github.com/madler/zlib/pull/1188
-        minizipMinVersion = "1.2.12"
-        if self.settings.os == "Android":
-            self.requires(f"minizip/[>={minizipMinVersion} <1.3.2]")
-        else:
-            self.requires(f"minizip/[^{minizipMinVersion}]")
 
         if self.options.lua_lib != "None":
             lib = str(self.options.lua_lib)
