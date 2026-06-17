@@ -196,7 +196,7 @@ build_recipes_from_cci_pull_requests() {
 
 	build_recipes \
 		${buildLuaJit:+ luajit/2.1.0-beta3} \
-		qt/5.15.18 \
+		qt/5.15.19 \
 
 	delete_current_dir_and_popd
 }
