@@ -154,7 +154,7 @@ build_recipes_with_patches() {
 	# versions must be synced with: conan_patches/<package>/conandata.yml
 	# if no custom patches are required for a package, it should be removed from here
 	build_recipes \
-		minizip/1.3.1 \
+		minizip/1.3.2 \
 
 	# not deleting the cloned repo because it's still used in the next step
 	popd
