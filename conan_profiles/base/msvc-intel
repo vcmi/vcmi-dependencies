@@ -7,7 +7,6 @@ include(msvc)
 # https://learn.microsoft.com/en-us/cpp/overview/compiler-versions
 # v142 / 14.29 / 19.29
 compiler.version=192
-compiler.update=9
 
 [conf]
 {% set _WIN32_WINNT_WIN7 = '0x0601' %}
