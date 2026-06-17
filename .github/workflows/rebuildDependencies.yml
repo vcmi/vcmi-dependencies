@@ -46,7 +46,7 @@ jobs:
             os: windows-2025-vs2026
 
           - platform: windows-arm64
-            os: windows-11-arm
+            os: windows-11-vs2026-arm
 
           - platform: linux-x64
             os: ubuntu-24.04
