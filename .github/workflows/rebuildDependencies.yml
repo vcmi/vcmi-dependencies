@@ -178,5 +178,5 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: dependencies-${{ matrix.platform }}
+        compression-level: 0
         path: ${{ env.DEPS_FILE }}
-        archive: false
