@@ -154,7 +154,7 @@ build_recipes_with_patches() {
 	# versions must be synced with: conan_patches/<package>/conandata.yml
 	# if no custom patches are required for a package, it should be removed from here
 	build_recipes \
-		minizip/1.3.1 \
+		minizip/1.3.2 \
 
 	# not deleting the cloned repo because it's still used in the next step
 	popd
@@ -196,7 +196,7 @@ build_recipes_from_cci_pull_requests() {
 
 	build_recipes \
 		${buildLuaJit:+ luajit/2.1.0-beta3} \
-		qt/5.15.18 \
+		qt/5.15.19 \
 
 	delete_current_dir_and_popd
 }

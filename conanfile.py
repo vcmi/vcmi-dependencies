@@ -11,6 +11,7 @@ class VCMI(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
 
     _libRequires = [
+        "minizip/[^1.2.12]",
         "zlib/[^1.2.12]",
         "libiconv/1.17",
     ]
@@ -31,7 +32,7 @@ class VCMI(ConanFile):
         "with_ffmpeg": [True, False],
         "with_onnxruntime": [True, False],
         "with_discord_presence": [True, False],
-        "lua_lib": ["None", "luajit", "lua"],
+        "lua_lib": ["luajit", "lua"],
     }
     default_options = {
         "target_pre_windows10": False,
@@ -86,6 +87,9 @@ class VCMI(ConanFile):
             # TODO: in Qt 6 this option doesn't exist
             self.options["qt"].qtandroidextras = True
 
+        if self.options.lua_lib == "luajit":
+            self.options["luajit"].with_gc64 = True
+
         if is_msvc(self):
             # required because VCMI uses dynamic runtime
             self.options["boost"].shared = True
@@ -107,20 +111,12 @@ class VCMI(ConanFile):
         else:
             self.requires(f"boost/[^{boostMinVersion}]")
 
-        # v1.3.2 is broken for Android, see https://github.com/madler/zlib/pull/1188
-        minizipMinVersion = "1.2.12"
-        if self.settings.os == "Android":
-            self.requires(f"minizip/[>={minizipMinVersion} <1.3.2]")
-        else:
-            self.requires(f"minizip/[^{minizipMinVersion}]")
-
-        if self.options.lua_lib != "None":
-            lib = str(self.options.lua_lib)
-            libVersion = {
-                "lua": "[^5.4.7]",
-                "luajit": "2.1.0-beta3",
-            }.get(lib)
-            self.requires(f"{lib}/{libVersion}")
+        luaLib = str(self.options.lua_lib)
+        luaLibVersion = {
+            "lua": "[^5.4.7]",
+            "luajit": "2.1.0-beta3",
+        }.get(luaLib)
+        self.requires(f"{luaLib}/{luaLibVersion}")
 
         # client
         if self.options.with_ffmpeg:
