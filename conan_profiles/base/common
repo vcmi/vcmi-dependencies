@@ -1,6 +1,12 @@
 [settings]
 build_type=Release
 
+[replace_requires]
+# sdl_ttf requires 2.13.2 but Qt requires >= 2.13 (2.14.3 at this moment)
+# when building the remaining libs with `conan install`,
+# the separately built Qt is ignored and rebuilt once more against freetype/2.13.2
+freetype/*: freetype/2.14.3
+
 [options]
 # shared (dynamic) libs
 boost/*:shared=True
