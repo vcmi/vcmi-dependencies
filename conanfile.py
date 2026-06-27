@@ -100,7 +100,7 @@ class VCMI(ConanFile):
 
         # lib
         # boost::filesystem removed support for Windows < 10 in v1.87
-        boostMinVersion = "1.74"
+        boostMinVersion = "1.69"
         if self.options.get_safe("target_pre_windows10", False):
             self.requires(f"boost/[>={boostMinVersion} <1.87]")
         else:
