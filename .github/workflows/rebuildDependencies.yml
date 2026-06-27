@@ -147,6 +147,10 @@ jobs:
       run: |
         BUILD_ACTION=build_recipes_from_cci_pull_requests ./build.sh
 
+    - name: Build custom recipes
+      run: |
+        BUILD_ACTION=build_custom_recipes ./build.sh
+
     - name: Build the rest of the dependencies
       run: |
         BUILD_ACTION=build_normal_recipes ./build.sh

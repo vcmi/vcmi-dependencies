@@ -4,6 +4,7 @@ from conan.tools.apple import is_apple_os
 from conan.tools.microsoft import is_msvc
 
 from os import getenv
+from pathlib import Path
 
 required_conan_version = ">=2.13.0"
 
@@ -87,9 +88,6 @@ class VCMI(ConanFile):
             # TODO: in Qt 6 this option doesn't exist
             self.options["qt"].qtandroidextras = True
 
-        if self.options.lua_lib == "luajit":
-            self.options["luajit"].with_gc64 = True
-
         if is_msvc(self):
             # required because VCMI uses dynamic runtime
             self.options["boost"].shared = True
@@ -111,10 +109,11 @@ class VCMI(ConanFile):
         else:
             self.requires(f"boost/[^{boostMinVersion}]")
 
+        luajitVersionFile = Path(__spec__.origin).resolve().parent / "luajit_version"
         luaLib = str(self.options.lua_lib)
         luaLibVersion = {
             "lua": "[^5.4.7]",
-            "luajit": "2.1.0-beta3",
+            "luajit": luajitVersionFile.read_text().rstrip(),
         }.get(luaLib)
         self.requires(f"{luaLib}/{luaLibVersion}")
 

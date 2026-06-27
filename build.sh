@@ -10,6 +10,7 @@ tempDir="${tempDir//\\//}" # for Windows
 scriptDir=$(cd "$(dirname "$0")" && pwd)
 cciRecipePathQt='recipes/qt'
 cciRepoName='conan-center-index'
+conanOptionOrdinaryLuaLib='&:lua_lib=lua'
 conanOptionTargetPreWindows10='&:target_pre_windows10=True'
 if command -v python3 >/dev/null ; then
 	python=python3
@@ -70,7 +71,9 @@ build_recipes() {
 		read -r package version <<<"$p"
 		IFS="$IFS_OLD"
 
-		if [[ $package == qt ]] ; then
+		if [[ "${PACKAGE_PATH:-}" ]] ; then
+			packagePath="$PACKAGE_PATH"
+		elif [[ $package == qt ]] ; then
 			packagePath="$cciRecipePathQt/5.x.x"
 		else
 			packagePath="recipes/$package/all"
@@ -181,24 +184,27 @@ build_onnx_recipes_with_patches() {
 
 build_recipes_from_cci_pull_requests() {
 	print_current_step
-    # TODO: remove LuaJIT when https://github.com/conan-io/conan-center-index/pull/26577 is merged
     # TODO: remove Qt5 when the following are merged:
 	# - https://github.com/conan-io/conan-center-index/pull/28251
 	# - https://github.com/conan-io/conan-center-index/pull/29299
 
-	if [[ -z "${CONAN_OPTIONS:-}" || "$CONAN_OPTIONS" == *"lua_lib=luajit"* ]]; then
-		buildLuaJit=1
-	fi
-
 	clone_repo "https://github.com/kambala-decapitator/$cciRepoName" cci-fork vcmi \
-		${buildLuaJit:+ recipes/luajit} \
 		$cciRecipePathQt \
 
 	build_recipes \
-		${buildLuaJit:+ luajit/2.1.0-beta3} \
 		qt/5.15.19 \
 
 	delete_current_dir_and_popd
+}
+
+build_custom_recipes() {
+	print_current_step
+
+	if [[ "${CONAN_OPTIONS:-}" != *"$conanOptionOrdinaryLuaLib"* ]] ; then
+		clone_repo "https://github.com/kambala-decapitator/conan-luajit" luajit master
+		PACKAGE_PATH=. build_recipes "luajit/$(<"$scriptDir/luajit_version")"
+		delete_current_dir_and_popd
+	fi
 }
 
 build_normal_recipes() {
@@ -269,7 +275,7 @@ case "$platform" in
 		;;
 	windows-arm64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-arm64"]'
-		CONAN_OPTIONS="--options '&:lua_lib=lua'"
+		CONAN_OPTIONS="--options '$conanOptionOrdinaryLuaLib'"
 		;;
 	windows-x64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-x64"]'
@@ -304,4 +310,5 @@ install_system_libs
 build_recipes_with_patches
 build_onnx_recipes_with_patches # TODO: remove after fixing build against new recipes
 build_recipes_from_cci_pull_requests
+build_custom_recipes
 build_normal_recipes
