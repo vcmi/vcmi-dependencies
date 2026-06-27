@@ -275,7 +275,6 @@ case "$platform" in
 		;;
 	windows-arm64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-arm64"]'
-		CONAN_OPTIONS="--options '$conanOptionOrdinaryLuaLib'"
 		;;
 	windows-x64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-x64"]'
