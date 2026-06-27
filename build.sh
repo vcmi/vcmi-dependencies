@@ -147,6 +147,7 @@ install_system_libs() {
 build_recipes_with_patches() {
 	print_current_step
 	clone_repo "https://github.com/conan-io/$cciRepoName" "$cciRepoName" master \
+		recipes/flac \
 		recipes/minizip \
 		recipes/onnx \
 		recipes/onnxruntime \
@@ -158,6 +159,7 @@ build_recipes_with_patches() {
 	git fetch --no-tags origin 2d65e6a1500a8be291ddd16ef6360b6edbafd803
 	git -c advice.detachedHead=false checkout FETCH_HEAD
 	build_recipes \
+		flac/1.4.2 \
 		minizip/1.3.1 \
 
 	# not deleting the cloned repo because it's still used in the next step
