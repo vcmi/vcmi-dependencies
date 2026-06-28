@@ -153,6 +153,10 @@ build_recipes_with_patches() {
 
 	# versions must be synced with: conan_patches/<package>/conandata.yml
 	# if no custom patches are required for a package, it should be removed from here
+
+	# parent of f84abb03e0e9e36fd522125937f329ecfba8e459 where v1.3.1 was removed
+	git fetch --no-tags origin 2d65e6a1500a8be291ddd16ef6360b6edbafd803
+	git -c advice.detachedHead=false checkout FETCH_HEAD
 	build_recipes \
 		minizip/1.3.1 \
 
@@ -196,6 +200,11 @@ build_recipes_from_cci_pull_requests() {
 
 	build_recipes \
 		${buildLuaJit:+ luajit/2.1.0-beta3} \
+
+	# parent of fa3fd32a9a43d064226e690880587e495975f5c9 where 5.15.19 was added
+	git fetch --no-tags origin d2f7f684278755b98e021191310205d0aaa6a6be
+	git -c advice.detachedHead=false checkout FETCH_HEAD
+	build_recipes \
 		qt/5.15.18 \
 
 	delete_current_dir_and_popd
