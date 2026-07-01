@@ -186,7 +186,7 @@ build_recipes_from_cci_pull_requests() {
 	# - https://github.com/conan-io/conan-center-index/pull/28251
 	# - https://github.com/conan-io/conan-center-index/pull/29299
 
-	if [[ -z "${CONAN_OPTIONS:-}" || "$CONAN_OPTIONS" == *"lua_lib=luajit"* ]]; then
+	if [[ "${CONAN_OPTIONS:-}" == *"lua_lib=luajit"* ]]; then
 		buildLuaJit=1
 	fi
 
@@ -269,7 +269,6 @@ case "$platform" in
 		;;
 	windows-arm64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-arm64"]'
-		CONAN_OPTIONS="--options '&:lua_lib=lua'"
 		;;
 	windows-x64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-x64"]'

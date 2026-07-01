@@ -37,7 +37,7 @@ class VCMI(ConanFile):
         "with_ffmpeg": True,
         "with_onnxruntime": True,
         "with_discord_presence": True,
-        "lua_lib": "luajit",
+        "lua_lib": "None",
     }
 
     def config_options(self):
