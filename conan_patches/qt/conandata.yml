@@ -1,5 +1,5 @@
 patches:
-  "5.15.16":
+  "5.15.19":
     - "base_path": "qt5/qtbase"
       "patch_file": "patches/android-21-22.diff"
     - "base_path": "qt5/qtbase"
