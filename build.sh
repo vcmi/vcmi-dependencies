@@ -240,44 +240,52 @@ case "$platform" in
 	android-32|android-armv7|android-armeabi-v7a)
 		CONAN_PROFILES_JSON_ARRAY='["android-32-ndk", "base/android-system"]'
 		CONAN_SYSTEM_LIBS='zlib'
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	android-64|android-arm64|android-arm64-v8a)
 		CONAN_PROFILES_JSON_ARRAY='["android-64-ndk", "base/android-system"]'
 		CONAN_SYSTEM_LIBS='zlib'
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	android-x64)
 		CONAN_PROFILES_JSON_ARRAY='["android-x64-ndk", "base/android-system"]'
 		CONAN_SYSTEM_LIBS='zlib'
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	ios|ios-arm64)
 		CONAN_PROFILES_JSON_ARRAY='["ios-arm64", "base/apple-system"]'
 		CONAN_SYSTEM_LIBS='bzip2 libiconv sqlite3 zlib'
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	linux-arm64)
 		CONAN_PROFILES_JSON_ARRAY='["linux-arm64"]'
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	linux-x64)
 		CONAN_PROFILES_JSON_ARRAY='["linux-x64"]'
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	mac-arm|macos-arm64)
 		CONAN_PROFILES_JSON_ARRAY='["macos-arm", "base/apple-system"]'
 		CONAN_SYSTEM_LIBS='bzip2 libiconv sqlite3 zlib'
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	mac-intel|macos-intel)
 		CONAN_PROFILES_JSON_ARRAY='["macos-intel", "base/apple-system"]'
 		CONAN_SYSTEM_LIBS='bzip2 libiconv sqlite3 zlib'
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	windows-arm64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-arm64"]'
-		CONAN_OPTIONS="--options '&:lua_lib=lua'"
+		CONAN_OPTIONS="--options '&:lua_lib=None'"
 		;;
 	windows-x64)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-x64"]'
-		CONAN_OPTIONS="--options '$conanOptionTargetPreWindows10'"
+		CONAN_OPTIONS="--options '$conanOptionTargetPreWindows10' --options '&:lua_lib=None'"
 		;;
 	windows-x86)
 		CONAN_PROFILES_JSON_ARRAY='["msvc-x86"]'
-		CONAN_OPTIONS="--options '$conanOptionTargetPreWindows10'"
+		CONAN_OPTIONS="--options '$conanOptionTargetPreWindows10' --options '&:lua_lib=None'"
 		;;
 	*)
 		[ -z "$platform" ] || error "unknown platform: $platform"
