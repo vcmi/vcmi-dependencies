@@ -88,6 +88,9 @@ class VCMI(ConanFile):
             # TODO: in Qt 6 this option doesn't exist
             self.options["qt"].qtandroidextras = True
 
+        if self.options.lua_lib == "lua":
+            self.options["lua"].compile_as_cpp = True
+
         if is_msvc(self):
             # required because VCMI uses dynamic runtime
             self.options["boost"].shared = True
