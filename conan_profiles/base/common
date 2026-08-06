@@ -204,34 +204,28 @@ qt/*:with_openal=False
 qt/*:with_pq=False
 
 # SDL
-sdl/*:iconv=True
-sdl/*:sdl2main=True
-sdl/*:vulkan=False
+sdl/*:libiconv=True
 
 # SDL_image
 # bmp, png are the only ones that needs to be supported
 # dds support may be useful for HD edition, but not supported by sdl_image at the moment
-sdl_image/*:gif=False
-sdl_image/*:lbm=False
-sdl_image/*:pcx=False
-sdl_image/*:pnm=False
-sdl_image/*:qoi=False
-sdl_image/*:svg=False
-sdl_image/*:tga=False
+sdl_image/*:with_avif=False
+sdl_image/*:with_jxl=False
 sdl_image/*:with_libjpeg=False
 sdl_image/*:with_libtiff=False
 sdl_image/*:with_libwebp=False
-sdl_image/*:xcf=False
-sdl_image/*:xpm=False
-sdl_image/*:xv=False
 
 # SDL_mixer
 # mp3, ogg and wav are the only ones that needs to be supported, flac is a bonus
-sdl_mixer/*:mad=False
-sdl_mixer/*:mikmod=False
-sdl_mixer/*:modplug=False
-sdl_mixer/*:nativemidi=False
-sdl_mixer/*:tinymidi=False
+sdl_mixer/*:with_flac=flac
+sdl_mixer/*:with_mpg123=True
+sdl_mixer/*:with_opus=True
+sdl_mixer/*:with_vorbis=stb
+
+# SDL_ttf
+sdl_ttf/*:with_harfbuzz=False
+# plutosvg is needed for color emoji support
+sdl_ttf/*:with_plutosvg=True
 
 # libsquish
 # accelerate as much as possible

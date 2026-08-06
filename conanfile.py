@@ -6,7 +6,8 @@ from conan.tools.microsoft import is_msvc
 from os import getenv
 from pathlib import Path
 
-required_conan_version = ">=2.13.0"
+# sdl_mixer recipe requires >=2.25
+required_conan_version = ">=2.25.0"
 
 class VCMI(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
@@ -19,9 +20,9 @@ class VCMI(ConanFile):
     _clientRequires = [
         "libsquish/[^1.15]",
         "onetbb/[^2021.7]",
-        "sdl_image/[^2.8.2]",
-        "sdl_mixer/[^2.8.0]",
-        "sdl_ttf/[^2.0.18]",
+        "sdl_image/[^3.4.4]",
+        "sdl_mixer/[^3.2.0]",
+        "sdl_ttf/[^3.2.2]",
     ]
     _launcherRequires = [
         "xz_utils/[^5.2.5]", # innoextract
@@ -80,8 +81,6 @@ class VCMI(ConanFile):
 
     # hard requirements on dependencies' options
     def configure(self):
-        self.options["sdl"].sdl2main = self.settings.os != "iOS"
-
         self.options["qt"].qttools = True
         self.options["qt"].with_md4c = True
         if self.settings.os == "Android":
@@ -129,10 +128,8 @@ class VCMI(ConanFile):
             self.requires("fmt/[>=12.1.0]")
             self.requires("glaze/[>=5.5.4]")
 
-        # upcoming SDL version 3.0+ is not supported at the moment due to API breakage
-        # SDL versions between 2.22-2.26.1 have broken sound
-        # versions before 2.30.7 don't build for Android with NDK 27: https://github.com/libsdl-org/SDL/issues/9792
-        self.requires("sdl/[^2.30.7]")
+        # sdl_mixer requires SDL 3.4+
+        self.requires("sdl/[^3.4.0]")
 
         # launcher
         if self.settings.os == "Android":
