@@ -19,4 +19,3 @@ tools.apple:enable_bitcode=False
 
 [options]
 qt/*:openssl=False
-sdl_image/*:imageio=True

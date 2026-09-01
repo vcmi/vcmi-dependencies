@@ -12,4 +12,9 @@ sdl_mixer/*:shared=False
 sdl_ttf/*:shared=False
 
 qt/*:opengl=es2
-sdl/*:sdl2main=False
+
+# desktop OpenGL is unavailable here anyway and the recipe would produce a broken
+# package_info(): it references opengl::opengl without requiring it
+sdl/*:opengl=False
+# SDL's HIDAPI backend calls into libusb, which is not available on iOS and would cause a link error
+sdl/*:hidapi=False

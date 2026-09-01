@@ -94,6 +94,14 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    - name: Select Android SDK platform for Qt
+      if: ${{ startsWith(matrix.platform, 'android') }}
+      run: |
+        # Qt 5 can't handle minor-versioned SDK platforms (e.g. android-37.2):
+        # it picks such a platform as the newest one and then fails to find android.jar in it
+        androidPlatform=$(ls "$ANDROID_HOME/platforms" | grep -E '^android-[[:digit:]]+$' | sort --version-sort | tail -n1)
+        echo "ANDROID_API_VERSION=$androidPlatform" >> "$GITHUB_ENV"
+
     - name: Setup Conan Client
       run: |
         pipx install conan
