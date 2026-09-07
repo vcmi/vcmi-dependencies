@@ -36,10 +36,11 @@ print_current_step() {
 
 # performs `pushd` inside the cloned repo
 clone_repo() {
-	repoUrl="$1"
-	repoPath="$tempDir/$2"
-	branch="$3"
-	sparseCheckoutPaths=("${@:4}")
+	local repoUrl="$1"
+	local repoPath="$tempDir/$2"
+	local branch="$3"
+	local sparseCheckoutPaths=("${@:4}")
+	local hasSparseCheckout=""
 
 	[ ${#sparseCheckoutPaths[@]} -eq 0 ] || hasSparseCheckout=1
 
