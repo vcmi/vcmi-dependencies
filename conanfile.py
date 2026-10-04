@@ -24,7 +24,7 @@ class VCMI(ConanFile):
         "sdl_ttf/[^3.2.2]",
     ]
     _launcherRequires = [
-        "libcurl/[>=8.17 <9]", # 8.17 added Apple SecTrust support
+        "libcurl/[^8.17]", # 8.17 added Apple SecTrust support
         "xz_utils/[^5.2.5]", # innoextract
     ]
     requires = _libRequires + _clientRequires + _launcherRequires
