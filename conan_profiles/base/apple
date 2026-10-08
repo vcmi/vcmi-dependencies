@@ -18,4 +18,4 @@ onnxruntime/*:compiler.cppstd=17
 tools.apple:enable_bitcode=False
 
 [options]
-qt/*:openssl=False
+libcurl/*:with_apple_sectrust=True

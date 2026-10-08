@@ -156,6 +156,27 @@ ffmpeg/*:enable_protocols={{ ffProtocols|join(',') }}
 # ffmpeg/*:with_programs=True
 # ffmpeg/*:with_sdl=True
 
+# libcurl
+# used only for HTTPS downloads in launcher
+# CA certificates are provided at runtime by VCMI, path detected on build machine would be wrong on target system
+libcurl/*:with_ca_bundle=False
+libcurl/*:with_ca_path=False
+libcurl/*:with_cookies=False
+libcurl/*:with_dict=False
+libcurl/*:with_file=False
+libcurl/*:with_form_api=False
+libcurl/*:with_ftp=False
+libcurl/*:with_gopher=False
+libcurl/*:with_imap=False
+libcurl/*:with_mqtt=False
+libcurl/*:with_pop3=False
+libcurl/*:with_rtsp=False
+libcurl/*:with_smtp=False
+libcurl/*:with_telnet=False
+libcurl/*:with_tftp=False
+libcurl/*:with_unix_sockets=False
+libcurl/*:with_websockets=False
+
 # Lua
 lua/*:compile_as_cpp=True
 
@@ -193,7 +214,7 @@ onetbb/*:tbbproxy=False
 ] %}
 qt/*:config={{ qtConfig|join(' ') }}
 qt/*:essential_modules=False
-qt/*:openssl=True
+qt/*:openssl=False
 qt/*:qtsvg=True
 qt/*:qttools=True
 qt/*:with_freetype=False

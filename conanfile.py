@@ -1,6 +1,5 @@
 from conan import ConanFile
 from conan.errors import ConanInvalidConfiguration
-from conan.tools.apple import is_apple_os
 from conan.tools.microsoft import is_msvc
 
 from os import getenv
@@ -25,6 +24,7 @@ class VCMI(ConanFile):
         "sdl_ttf/[^3.2.2]",
     ]
     _launcherRequires = [
+        "libcurl/[^8.17]", # 8.17 added Apple SecTrust support
         "xz_utils/[^5.2.5]", # innoextract
     ]
     requires = _libRequires + _clientRequires + _launcherRequires
@@ -66,7 +66,7 @@ class VCMI(ConanFile):
         self.options["sdl_mixer"].shared = isSdlShared
         self.options["sdl_ttf"].shared = isSdlShared
 
-        self.options["qt"].openssl = not is_apple_os(self)
+        self.options["qt"].openssl = False
         self.options["qt"].qtsvg = True
         if self.settings.os == "Android":
             self.options["qt"].android_sdk = getenv("ANDROID_HOME")
@@ -136,7 +136,3 @@ class VCMI(ConanFile):
             self.requires("qt/[~5.15.14]") # earlier versions have serious bugs
         else:
             self.requires("qt/[~5.15.2]")
-
-    def validate(self):
-        if not is_apple_os(self) and self.dependencies["qt"].options.openssl != True:
-            self.output.warning("qt:openssl option for non-Apple OS should be set to True, otherwise mods can't be downloaded")
