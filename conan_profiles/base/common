@@ -225,6 +225,7 @@ qt/*:with_openal=False
 qt/*:with_pq=False
 
 # SDL
+sdl/*:camera=False
 sdl/*:libiconv=True
 
 # SDL_image
