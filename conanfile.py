@@ -24,7 +24,6 @@ class VCMI(ConanFile):
         "sdl_ttf/[^3.2.2]",
     ]
     _launcherRequires = [
-        "libcurl/[^8.17]", # 8.17 added Apple SecTrust support
         "xz_utils/[^5.2.5]", # innoextract
     ]
     requires = _libRequires + _clientRequires + _launcherRequires
@@ -136,3 +135,7 @@ class VCMI(ConanFile):
             self.requires("qt/[~5.15.14]") # earlier versions have serious bugs
         else:
             self.requires("qt/[~5.15.2]")
+
+        # macOS SDK has libcurl, nothing else depends on it
+        if self.settings.os != "Macos":
+            self.requires("libcurl/[^8.17]") # 8.17 added Apple SecTrust support
