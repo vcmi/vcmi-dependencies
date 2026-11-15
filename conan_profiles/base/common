@@ -31,10 +31,12 @@ zlib/*:shared=True
 # iostreams: random, regex
 # program_options: (none)
 # see e.g. conan-center-index/recipes/boost/all/dependencies
+# container is also enabled because newer Boost versions seem to build it implicitly causing error:
+# ConanException: These libraries were built, but were not used in any boost module: {'boost_container'}
 boost/*:without_charconv=True
 boost/*:without_chrono=True
 boost/*:without_cobalt=True
-boost/*:without_container=True
+#boost/*:without_container=True
 boost/*:without_context=True
 boost/*:without_contract=True
 boost/*:without_coroutine=True

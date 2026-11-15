@@ -34,6 +34,7 @@ class VCMI(ConanFile):
         "with_onnxruntime": [True, False],
         "with_discord_presence": [True, False],
         "lua_lib": ["luajit", "lua"],
+        "qt_version": ["None", 5, 6],
     }
     default_options = {
         "target_pre_windows10": False,
@@ -41,6 +42,7 @@ class VCMI(ConanFile):
         "with_onnxruntime": True,
         "with_discord_presence": True,
         "lua_lib": "luajit",
+        "qt_version": 5,
     }
 
     def config_options(self):
@@ -67,7 +69,7 @@ class VCMI(ConanFile):
 
         self.options["qt"].openssl = False
         self.options["qt"].qtsvg = True
-        if self.settings.os == "Android":
+        if self.settings.os == "Android" and self.options.qt_version != "None":
             self.options["qt"].android_sdk = getenv("ANDROID_HOME")
         if isMobile:
             self.options["qt"].opengl = "es2"
@@ -80,10 +82,10 @@ class VCMI(ConanFile):
 
     # hard requirements on dependencies' options
     def configure(self):
-        self.options["qt"].qttools = True
-        self.options["qt"].with_md4c = True
-        if self.settings.os == "Android":
-            # TODO: in Qt 6 this option doesn't exist
+        if self.options.qt_version != "None":
+            self.options["qt"].qttools = True
+            self.options["qt"].with_md4c = True
+        if self.settings.os == "Android" and self.options.qt_version == 5:
             self.options["qt"].qtandroidextras = True
 
         if self.options.lua_lib == "lua":
@@ -131,10 +133,14 @@ class VCMI(ConanFile):
         self.requires("sdl/[^3.4.0]")
 
         # launcher
-        if self.settings.os == "Android":
-            self.requires("qt/[~5.15.14]") # earlier versions have serious bugs
-        else:
-            self.requires("qt/[~5.15.2]")
+        if self.options.qt_version == 6:
+            # android widgets 6.7-6.8.3 & 6.9-6.9.1 https://bugreports.qt.io/browse/QTBUG-123327
+            self.requires("qt/[^6.8]")
+        elif self.options.qt_version == 5:
+            if self.settings.os == "Android":
+                self.requires("qt/[~5.15.14]") # earlier versions have serious bugs
+            else:
+                self.requires("qt/[~5.15.2]")
 
         # macOS SDK has libcurl, nothing else depends on it
         if self.settings.os != "Macos":

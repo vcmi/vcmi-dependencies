@@ -28,5 +28,6 @@ sdl_mixer/*:shared=False
 sdl_ttf/*:shared=False
 
 qt/*:opengl=es2
-qt/*:qtandroidextras=True
 qt/*:with_freetype=True
+
+qt/5.*:qtandroidextras=True
